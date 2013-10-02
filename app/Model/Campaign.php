@@ -42,6 +42,26 @@ class Campaign extends AppModel {
 				'rule' => 'numeric',
 				'message' => 'Please supply number only.'
 			)
+		),
+		'score' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'This field cannot be left blank.'
+			),
+			'numeric' => array(
+				'rule' => 'numeric',
+				'message' => 'Please supply number only.'
+			)
+		),
+		'refferal' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'This field cannot be left blank.'
+			),
+			'numeric' => array(
+				'rule' => 'numeric',
+				'message' => 'Please supply number only.'
+			)
 		)
 	);
 

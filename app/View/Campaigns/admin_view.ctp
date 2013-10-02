@@ -32,9 +32,33 @@
 							&nbsp;
 						</dd>
 
+						<dt><?php echo __('Max Score'); ?></dt>
+						<dd>
+							<?php echo $campaign['Campaign']['max_score']; ?>
+							&nbsp;
+						</dd>
+
+						<dt><?php echo __('Score'); ?></dt>
+						<dd>
+							<?php echo $campaign['Campaign']['score']; ?>
+							&nbsp;
+						</dd>
+
+						<dt><?php echo __('Refferal'); ?></dt>
+						<dd>
+							<?php echo $campaign['Campaign']['refferal']; ?>
+							&nbsp;
+						</dd>
+
+						<dt><?php echo __('Status'); ?></dt>
+						<dd>
+							<?php echo ($campaign['Campaign']['status'] == 1 ? 'Open' : ''); ?>
+							&nbsp;
+						</dd>
+
 						<dt><?php echo __('Published'); ?></dt>
 						<dd>
-							<?php echo $campaign['Campaign']['published']; ?>
+							<?php echo ($campaign['Campaign']['published'] == 1 ? 'Yes' : 'No'); ?>
 							&nbsp;
 						</dd>
 

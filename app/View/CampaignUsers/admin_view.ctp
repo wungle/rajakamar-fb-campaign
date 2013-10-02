@@ -70,7 +70,7 @@
 						</dd>
 
 						<div class="form-actions">
-							<?php echo $this->Html->link(__('Back'), '/admin/campaignUsers', array('class' => 'btn')); ?>
+							<?php echo $this->Html->link(__('Back'), '/admin/campaignUsers/index/' . $campaignUser['CampaignUser']['campaign_id'], array('class' => 'btn')); ?>
 						</div>
 					</dl>
         		</div>

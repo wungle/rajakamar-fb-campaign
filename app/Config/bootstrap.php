@@ -1,7 +1,7 @@
 <?php
 
 	CakePlugin::load(array('Users' => array('routes' => true), 'Search', 'Utils'));
-	// CakePlugin::loadAll();
+	CakePlugin::load('Facebook');
 
 /**
  * This file is loaded automatically by the app/webroot/index.php file after core.php
@@ -116,5 +116,9 @@ CakeLog::config('error', array(
 Configure::write('Users.allowRegistration', false);
 Configure::write('Users.roles', false);
 Configure::write('defaultEmail', 'noreply@rajakamar.com');
+
+// Facebook
+Configure::write('FB_URL_PAGE', 'https://www.facebook.com/pages/Rajakamar/214970965215483');
+Configure::write('FB_RAJAKAMAR', 214970965215483);
 
 define('PAGINATION_LIMIT',	20);

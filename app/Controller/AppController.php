@@ -33,7 +33,20 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-	public $components = array('Auth', 'Users.RememberMe', 'Search.Prg', 'Session');
+	public $components = array(
+		'Users.RememberMe',
+		'Search.Prg',
+		'Session',
+		'Auth' => array(
+            'authenticate' => array(
+                'Form' => array(
+                    'fields' => array('username' => 'email')
+                )
+            ),
+            // 'authorize' => 'Controller'
+        )
+    );
+    
 	public $presetVars = array(
 	    array('field' => 'name', 'type' => 'value'),
 	    array('field' => 'pr_status', 'type' => 'value'),

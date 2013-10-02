@@ -101,9 +101,9 @@ class FacebookHelper extends AppHelper {
 	* - redirect string: to your app's login url (default null)
 	* - label string: text to use in link (default null)
 	* - custom boolean: Used to create custom link instead of standart fbml. 
-	    if redirect option is set this one is not required.
+	*    if redirect option is set this one is not required.
 	* - img string: Creates fortmatted image tag. 'img' should be
-		relative to /app/webroot/img/
+	*	relative to /app/webroot/img/
 	* - alt string: Image caption
 	* - id string: Tag CSS id
 	* - show-faces bool: Show pictures of the user's friends who have joined your application
@@ -163,9 +163,9 @@ class FacebookHelper extends AppHelper {
 	* - label string: text to use in link (default logout)
 	* - confirm string: Alert dialog which will be visible if user clicks on the button/link
 	* - custom boolean: Used to create custom link instead of standart fbml. 
-	    if redirect option is set this one is not required.
+	*    if redirect option is set this one is not required.
 	* - img string: Creates fortmatted image tag. 'img' should be
-		relative to /app/webroot/img/
+	*	relative to /app/webroot/img/
 	* - alt string: Image caption
 	* - id string: Tag CSS Id
 	* @param string label
@@ -496,8 +496,10 @@ class FacebookHelper extends AppHelper {
 	*/
 	
 	public function init($options = null, $reload = true) {
+		$campaign = isset($this->params->pass[0]) && isset($this->params->query['signed_request']) ? $this->params->pass[0] . '?signed_request=' . $this->params->query['signed_request'] : '';
+
 		$options = array_merge(array(
-			'perms' => 'email'
+			'perms' => 'email,user_likes,publish_actions'
 		), (array)$this->loginOptions);
 		if ($appId = FacebookInfo::getConfig('appId')) {
 			$init = '<div id="fb-root"></div>';
@@ -511,7 +513,6 @@ class FacebookHelper extends AppHelper {
 			oauth      : true, // enable OAuth 2.0
 			xfbml      : true  // parse XFBML
 		});
-		
 		
 		// Checks whether the user is logged in
 		FB.getLoginStatus(function(response) {
@@ -535,7 +536,17 @@ class FacebookHelper extends AppHelper {
 		});
 		
 		// Other javascript code goes here!
+		// whenever the user logs in, we refresh the page
+		FB.Event.subscribe('auth.login', function() {
+		  	window.location.reload();
+		});
 
+		// Like button
+		FB.Event.subscribe('edge.create',
+		    function(response) {
+		        location.href = 'http://rajakamar.local/campaigns/user_process/" . $campaign . "';
+		    }
+		);
 	};
 
 	// logs the user in the application and facebook
@@ -545,7 +556,7 @@ class FacebookHelper extends AppHelper {
 				// user is logged in
 				// console.log('Welcome!');
 				if(redirection != null && redirection != ''){
-					top.location.href = redirection;
+					top.location.href = redirection + '?signed_request=' + response.authResponse.signedRequest;
 				}
 			} else {
 				// user could not log in

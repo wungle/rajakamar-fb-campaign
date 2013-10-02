@@ -63,6 +63,20 @@
 							</div>
 
 							<div class="control-group">
+								<label class="control-label" for="score">Score</label>
+								<div class="controls">
+									<?php echo $this->Form->input('score', array('type' => 'text', 'placeholder' => 'Enter score here', 'class' => 'span2', 'label' => false, 'escape' => false)); ?>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="refferal">Refferal</label>
+								<div class="controls">
+									<?php echo $this->Form->input('refferal', array('type' => 'text', 'placeholder' => 'Enter refferal here', 'class' => 'span2', 'label' => false, 'escape' => false)); ?>
+								</div>
+							</div>
+
+							<div class="control-group">
 								<label class="control-label" for="image">Image</label>
 								<div class="controls">
 									<?php echo $this->Form->input('image', array('type' => 'text', 'class' => 'span2', 'label' => false, 'escape' => false)); ?>

@@ -27,7 +27,14 @@
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
 	Router::connect('/', array('plugin' => 'users', 'controller' => 'users', 'action' => 'login'));
-	Router::connect('/campaign/*', array('controller' => 'campaigns', 'action' => 'index', 'admin' => false));
+	// Campaigns
+	Router::connect('/campaigns/user_process/*', array('controller' => 'campaigns', 'action' => 'user_process', 'admin' => false));
+	Router::connect('/campaigns/register/*', array('controller' => 'campaigns', 'action' => 'register', 'admin' => false));
+	Router::connect('/campaigns/user/*', array('controller' => 'campaigns', 'action' => 'user', 'admin' => false));
+	Router::connect('/campaigns/*', array('controller' => 'campaigns', 'action' => 'index', 'admin' => false));
+	// Campaign User
+	Router::connect('/campaignUsers/view/*', array('controller' => 'campaignUsers', 'action' => 'view', 'admin' => false));
+	Router::connect('/campaignUsers/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */

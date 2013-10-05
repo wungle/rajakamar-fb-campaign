@@ -15,3 +15,5 @@ Jumlah Referal : <?php echo ($refferal == null ? 0 : $refferal); ?>
 <?php if($campaignClosed == true) { ?>
 	<?php echo $this->Facebook->share(Router::url('/', true) . 'campaigns/' . $refferalId); //(default is the current page). ?>
 <?php } ?>
+
+<a onclick="share_me()">Test</a>

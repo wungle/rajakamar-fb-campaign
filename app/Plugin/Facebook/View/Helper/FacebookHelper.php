@@ -504,6 +504,7 @@ class FacebookHelper extends AppHelper {
 		if ($appId = FacebookInfo::getConfig('appId')) {
 			$init = '<div id="fb-root"></div>';
 			$init .= $this->Html->scriptBlock("
+			var isLoaded = false;
 	window.fbAsyncInit = function() {
 		FB.init({
 			appId      : '$appId', // App ID
@@ -513,7 +514,8 @@ class FacebookHelper extends AppHelper {
 			oauth      : true, // enable OAuth 2.0
 			xfbml      : true  // parse XFBML
 		});
-		
+		isLoaded = true;
+
 		// Checks whether the user is logged in
 		FB.getLoginStatus(function(response) {
 			if (response.authResponse) {
@@ -549,8 +551,44 @@ class FacebookHelper extends AppHelper {
 		);
 	};
 
+	// Check if sdk loaded
+	function checkIfLoaded() {
+		if(isLoaded == false) {
+			alert('Please wait...');
+
+			return false;
+		}
+
+		return true;
+	}
+
+	// Share button
+	function share_me() {
+		FB.ui(
+			{
+				method: 'feed',
+				name: 'Raja Kamar',
+				link: '" . Router::url('/', true) . "campaigns/',
+				picture: 'http://fbrell.com/f8.jpg',
+				caption: 'Reference Documentation',
+				description: 'Dialogs provide a simple, consistent interface for applications to interface with users.',
+				message: 'Facebook Dialogs are easy!'
+			},
+			function(response) {
+				if (response && response.post_id) {
+			        location.href = 'http://rajakamar.local/campaigns/user_shared/" . $campaign . "&user_shared=1';
+				} else {
+					alert('Sorry, Please post to your wall.');
+				}
+			}
+		);
+	}
+
 	// logs the user in the application and facebook
 	function login(redirection){
+		// Check if sdk loaded
+		checkIfLoaded();
+
 		FB.login(function (response) {
 			if(response.authResponse) {
 				// user is logged in

@@ -26,10 +26,11 @@
  * its action called 'display', and we pass a param to select the view file
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
-	Router::connect('/', array('plugin' => 'users', 'controller' => 'users', 'action' => 'login'));
+	Router::connect('/', array('controller' => 'campaigns', 'action' => 'index'));
 	// Campaigns
 	Router::connect('/campaigns/user_process/*', array('controller' => 'campaigns', 'action' => 'user_process', 'admin' => false));
 	Router::connect('/campaigns/register/*', array('controller' => 'campaigns', 'action' => 'register', 'admin' => false));
+	Router::connect('/campaigns/user_shared/*', array('controller' => 'campaigns', 'action' => 'user_shared', 'admin' => false));
 	Router::connect('/campaigns/user/*', array('controller' => 'campaigns', 'action' => 'user', 'admin' => false));
 	Router::connect('/campaigns/*', array('controller' => 'campaigns', 'action' => 'index', 'admin' => false));
 	// Campaign User

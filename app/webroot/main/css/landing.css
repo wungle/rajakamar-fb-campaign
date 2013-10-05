@@ -1,0 +1,105 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+body {
+	margin: 0 auto;
+	padding:0;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	background: url(../images/bg.jpeg.jpg) repeat;
+}
+
+h3 {
+	font-size:24px;
+}
+
+h5 {
+	font-size:18px;
+}
+
+
+p {
+	font-size: 12px;
+	color: #FFF;
+}
+
+img {
+	border:none;
+}
+
+
+#container {
+	background-color: #FFF;
+	border: 1px solid #ebebeb;
+	text-align: center;
+	width: 970px;
+	margin: 0 auto;
+}
+
+#landing-page {
+	margin-top:-100px;
+}
+
+#landing-page .landing-box {
+	margin-top:75px;
+}
+
+#landing-page .faq {
+	float:left;
+	position:absolute;
+	margin-top:-165px;
+	margin-left:110px;
+	top: 772px;
+}
+
+#landing-page .faq img {
+	border:none;
+}
+
+#header_title img {
+	border: none;
+}
+
+#logo-singapore {
+	margin-top:-80px;
+	padding-right:10px;
+	float: right;
+}
+
+.clickhere {
+	float:right;
+	padding-right:135px;
+	position: relative;
+	margin-top:-250px;
+}
+
+#top-bg {
+	background: url(../images/bg.jpg) repeat-x;
+	height: 93px;
+}
+
+#logo {
+	width: 250px;
+	height: 76px;
+	float: left;
+	outline: 0px;
+	margin-top: -90px;
+	padding-left: 10px;
+}
+
+#footer {
+	padding: 10px;
+	display: block;
+	clear: right;
+	margin-top:120px;
+	margin-bottom: 10px;
+}
+
+#footer P {
+	color: #000;
+}

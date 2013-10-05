@@ -8,4 +8,4 @@
 
 <?php echo $this->Facebook->like(array('href' => Configure::read('FB_URL_PAGE'), 'show_faces' => false, 'layout' => 'button_count')); ?>
 
-<?php echo $this->Facebook->share(Router::url('/', true) . 'campaigns/' . $refferalId); //(default is the current page). ?>
+<?php echo $this->Html->link($this->Html->image('/main/images/facebookShare.png'), '#', array('onclick' => 'share_me()', 'escape' => false)); ?>

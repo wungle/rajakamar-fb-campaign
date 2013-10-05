@@ -1,10 +1,28 @@
-<!-- <img src="http://flymetothehaven.bookpanorama.com/themes/thehaven/assets/image/ad-the-haven.png?20130816" usemap="#map">
-<map id="map" name="map">
-	<area shape="rect" alt="KLIK DISINI" title="KLIK DISINI" coords="355,473,611,532" href="javascript:login('<?php //echo $this->params->here; ?>');">
-</map> -->
-
-<a href="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>');">Klik Disini</a>
-
-<?php //echo $this->Facebook->logout(array('img' => '/facebook-logout.png')); ?>
-
-<?php //echo $this->Facebook->share('http://www.example.com/url_to_share'); //(default is the current page). ?>
+<div id="top-bg"></div>
+<div id="container">
+    <div id="logo">
+    	<a href="http://www.rajakamar.com/">
+    		<img src="/main/images/Logo-Rajakamar.png" width="250" height="76" alt="Logo" />
+    	</a>
+  	</div>
+  	<div id="logo-singapore">
+  		<img src="/main/images/logo_360.png" width="250" height="65" alt="Icon" />
+  	</div>
+  	<div style=" padding-top: 10px; padding-bottom: 0px;"class="clearfix"></div>
+    <div style="padding-top:60px;"class="clearfix"></div>
+    <div id="landing-page">
+        <div class="landing-box">
+    		<img id="Image-Maps_8201310041331083" src="/main/images/Landing-Page-2.png" usemap="#Image-Maps_8201310041331083" width="900" height="635" alt="landing page"/>
+			<map id="_Image-Maps_8201310041331083" name="Image-Maps_8201310041331083">
+				<area shape="rect" coords="693,424,757,493" href="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>')" alt="" title=""/>
+				<area shape="rect" coords="898,633,900,635" href="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>')" alt="Image Map" title="Image Map"/>
+			</map>
+    	</div>
+        <div class="faq">
+          	<a href="index_faq.html"><img src="/main/images/sk.png" width="250" height="83" alt="FAQ" /></a>
+        </div>
+	</div>
+    <div style="clear: both; padding-top:30px;"id="footer">
+    	<p style="color:#999; font-size:11px;">copyright &copy; RajaKamar 2012 All Rights Reserved.</p>
+    </div>
+</div>

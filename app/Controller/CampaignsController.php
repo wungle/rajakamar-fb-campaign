@@ -13,7 +13,7 @@ class CampaignsController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->Auth->allow('index', 'user_process', 'register', 'user');
+		$this->Auth->allow('index', 'user_process', 'register', 'user', 'user_shared');
 
 		$this->dateNow = date('Ymd');
 	}
@@ -41,11 +41,13 @@ class CampaignsController extends AppController {
  * @return void
  */
 	public function index($campaignSlug = null) {
-		if($this->_check_campaign_status($campaignSlug) == false) {
-			$this->redirect('/campaignUsers/' . $campaignSlug);
-		}
+		$this->layout = 'landing_page';
 
 		$campaignData = $this->_check_campaign($campaignSlug);
+
+		if(empty($campaignData['Campaign']['slug'])) {
+			$this->redirect(Configure::read('SITE_RAJAKAMAR'));
+		}
 
 		if(isset($this->params->query['refferal']) && !empty($this->params->query['refferal'])) {
 			$this->Session->write('User.refferal', $this->params->query['refferal']);
@@ -60,7 +62,7 @@ class CampaignsController extends AppController {
 
 			$user = FB::getUser();
 			if($user) {
-				if($this->_check_user_register($user, $campaignSlug) == false || $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) == null) {
+				if($this->_check_user_register($user, $campaignSlug) == false || $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) == null || $this->_check_user_shared($user, $campaignSlug) == false) {
 					$this->redirect('/campaigns/register/' . $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
 				} else {
 					$this->redirect('/campaignUsers/view/' . $campaignSlug);
@@ -72,6 +74,8 @@ class CampaignsController extends AppController {
 	}
 
 	public function register($campaignSlug = null) {
+		$this->layout = 'register';
+		
 		App::uses('FB', 'Facebook.Lib');
 
 		$this->loadModel('CampaignUser');
@@ -116,6 +120,7 @@ class CampaignsController extends AppController {
 					$this->request->data['CampaignUser']['address'] = isset($fbUser['hometown']) ? $fbUser['hometown']['name'] : '';
 					$this->request->data['CampaignUser']['score'] = $campaignData['Campaign']['score'];
 					$this->request->data['CampaignUser']['refferal'] = $this->Session->read('User.refferal') == null ? 0 : $this->Session->read('User.refferal');
+					$this->request->data['CampaignUser']['shared'] = 0;
 
 					if ($this->CampaignUser->save($this->request->data)) {
 						$refferalId = $this->CampaignUser->getInsertID();
@@ -141,6 +146,70 @@ class CampaignsController extends AppController {
 		$this->set('refferalId', $campaignSlug . '?refferal=' . $refferalId);
 		$this->set('registered', $this->_check_user_register($fbUser['id'], $campaignSlug) == true ? true : false);
 		$this->set('campaignSlug', $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
+	}
+
+	public function user_shared($campaignSlug = null) {
+		$this->loadModel('CampaignUser');
+
+		if(isset($this->params->query['signed_request']) && !empty($this->params->query['signed_request'])) {
+			if(isset($this->params->query['user_shared']) && $this->params->query['user_shared'] == 1) {
+				$user = FB::getUser();
+				if($user) {
+					$campaignId = $this->Campaign->find('first', array(
+							'conditions' => array(
+								'Campaign.slug' => $campaignSlug
+							)
+						)
+					);
+
+					$user = $this->CampaignUser->find('first', array(
+							'conditions' => array(
+								'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
+								'CampaignUser.facebook_id' => $user
+							)
+						)
+					);
+
+					if(!empty($user)) {
+						if($user['CampaignUser']['shared'] == 0) {
+							$campaign['CampaignUser']['id'] = $user['CampaignUser']['id'];
+							$campaign['CampaignUser']['shared'] = true;
+
+							$this->CampaignUser->save($campaign);
+						}
+
+						$this->redirect('/campaigns/user_process/' . $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
+					} else {
+						$this->Session->setFlash(__('Sorry, You are not registered.'));
+						$this->redirect('/campaigns/register/' . $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
+					}
+				}
+			}
+		}
+
+		$this->redirect('/campaigns/' . $campaignSlug);
+	}
+
+	private function _check_user_shared($fbUserId = null, $campaignSlug = null) {
+		$this->loadModel('CampaignUser');
+
+		$campaignId = $this->Campaign->find('first', array(
+				'conditions' => array(
+					'Campaign.slug' => $campaignSlug
+				)
+			)
+		);
+
+		$fbId = $this->CampaignUser->find('first', array(
+				'conditions' => array(
+					'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
+					'CampaignUser.facebook_id' => $fbUserId,
+					'CampaignUser.status' => 1
+				)
+			)
+		);
+
+		return (empty($fbId) ? false : true);
 	}
 
 	private function _check_user_register($fbUserId = null, $campaignSlug = null) {

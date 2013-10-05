@@ -13,7 +13,7 @@ class CampaignUsersController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->Auth->allow('index', 'view');
+		$this->Auth->allow('index', 'view', 'search');
 	}
 
 /**
@@ -22,13 +22,15 @@ class CampaignUsersController extends AppController {
  * @return void
  */
 	public function index($campaignSlug = null) {
+		$this->layout = 'user_score';
+
 		$this->loadModel('Campaign');
 
 		$this->Campaign->recursive = 0;
 		$campaign = $this->Campaign->find('first', array('conditions' => array('Campaign.slug' => $campaignSlug)));
 
 		if(empty($campaign)) {
-			$this->redirect('/campaignUsers/' . $campaignSlug);
+			$this->redirect('/campaigns/' . $campaignSlug);
 		}
 
 		$this->CampaignUser->unBindModel(array('belongsTo' => array('Campaign')));
@@ -36,12 +38,18 @@ class CampaignUsersController extends AppController {
 			'conditions' => array(
 				'CampaignUser.campaign_id' => $campaign['Campaign']['id']
 			),
-			'limit' => 10
+			'limit' => 1
 		);
 
 		$this->set('campaignClosed', $this->_check_campaign_status($campaignSlug));
 		$this->set('campaignSlug', $campaignSlug);
 		$this->set('campaignUsers', $this->paginate());
+	}
+
+	public function search($keyword = null) {
+		if ($this->request->is('post')) {
+
+		}
 	}
 
 /**

@@ -119,6 +119,7 @@ Configure::write('defaultEmail', 'noreply@rajakamar.com');
 
 // Facebook
 Configure::write('FB_URL_PAGE', 'https://www.facebook.com/pages/Rajakamar/214970965215483');
+Configure::write('SITE_RAJAKAMAR', 'http://www.rajakamar.com');
 Configure::write('FB_RAJAKAMAR', 214970965215483);
 
 define('PAGINATION_LIMIT',	20);

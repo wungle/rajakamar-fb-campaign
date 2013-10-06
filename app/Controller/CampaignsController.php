@@ -128,7 +128,13 @@ class CampaignsController extends AppController {
 						$this->request->data['CampaignUser']['first_name'] = $fbUser['first_name'];
 						$this->request->data['CampaignUser']['last_name'] = $fbUser['last_name'];
 						$this->request->data['CampaignUser']['fb_email'] = $fbUser['email'];
-						$this->request->data['CampaignUser']['address'] = isset($fbUser['hometown']) ? $fbUser['hometown']['name'] : '';
+						if(isset($fbUser['hometown'])) {
+							$this->request->data['CampaignUser']['address'] = $fbUser['hometown']['name'];
+						} else {
+							if(isset($fbUser['location'])) {
+								$this->request->data['CampaignUser']['address'] = $fbUser['location']['name'];
+							}
+						}
 						$this->request->data['CampaignUser']['score'] = $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) != null ? $campaignData['Campaign']['score'] + $campaignData['Campaign']['score'] : $campaignData['Campaign']['score'];
 						$this->request->data['CampaignUser']['refferal'] = $this->Session->read('User.refferal') == null ? 0 : $this->Session->read('User.refferal');
 						$this->request->data['CampaignUser']['liked'] = $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) == null ? 0 : 1;

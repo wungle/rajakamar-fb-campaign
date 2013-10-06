@@ -38,10 +38,13 @@ class CampaignUsersController extends AppController {
 			'conditions' => array(
 				'CampaignUser.campaign_id' => $campaign['Campaign']['id']
 			),
-			'limit' => 1
+			'limit' => 15,
+			'order' => array(
+				'CampaignUser.score' => 'desc'
+			)
 		);
 
-		$this->set('campaignClosed', $this->_check_campaign_status($campaignSlug));
+		$this->set('campaignClosed', $this->_check_campaign_closed($campaignSlug));
 		$this->set('campaignSlug', $campaignSlug);
 		$this->set('campaignUsers', $this->paginate());
 	}
@@ -68,6 +71,12 @@ class CampaignUsersController extends AppController {
 		}
 
 		if($this->_check_user_register($user, $campaignSlug) == false) {
+			$this->Session->setFlash(__("Sorry, You are not registered."));
+			$this->redirect('/campaignUsers/' . $campaignSlug);
+		}
+
+		if($this->_check_user_shared_liked($user, $campaignSlug) == false) {
+			$this->Session->setFlash(__('Sorry, You are register not complete yet.'));
 			$this->redirect('/campaignUsers/' . $campaignSlug);
 		}
 
@@ -104,7 +113,9 @@ class CampaignUsersController extends AppController {
 		$this->set('score', $userData['CampaignUser']['score']);
 		$this->set('refferal', $refferal);
 		$this->set('refferalId', $campaignSlug . '?refferal=' . $userData['CampaignUser']['id']);
-		$this->set('campaignClosed', $this->_check_campaign_status($campaignSlug));
+		$this->set('campaignClosed', $this->_check_campaign_closed($campaignSlug));
+		$this->set('campaignSlug', $campaignSlug);
+		$this->set('campaignTitle', $campaignId['Campaign']['title']);
 	}
 
 	private function _check_user_register($fbUserId = null, $campaignSlug = null) {
@@ -128,7 +139,7 @@ class CampaignUsersController extends AppController {
 		return (empty($fbId) ? false : true);
 	}
 
-	private function _check_campaign_status($campaignSlug = null) {
+	private function _check_campaign_closed($campaignSlug = null) {
 		$campaignData = $this->Campaign->find('first',
 			array(
 				'conditions' => array(
@@ -138,7 +149,30 @@ class CampaignUsersController extends AppController {
 			)
 		);
 
-		return $campaignData['Campaign']['status'] == 0 ? false : true;
+		return $campaignData['Campaign']['status'] == 0 ? true : false;
+	}
+
+	private function _check_user_shared_liked($fbUserId = null, $campaignSlug = null) {
+		$this->loadModel('CampaignUser');
+
+		$campaignId = $this->Campaign->find('first', array(
+				'conditions' => array(
+					'Campaign.slug' => $campaignSlug
+				)
+			)
+		);
+
+		$fbId = $this->CampaignUser->find('first', array(
+				'conditions' => array(
+					'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
+					'CampaignUser.facebook_id' => $fbUserId,
+					'CampaignUser.liked' => 1,
+					'CampaignUser.shared' => 1
+				)
+			)
+		);
+
+		return (empty($fbId) ? false : true);
 	}
 
 /**

@@ -13,7 +13,7 @@ class CampaignsController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->Auth->allow('index', 'user_process', 'register', 'user', 'user_shared');
+		$this->Auth->allow('index', 'user_process', 'register', 'user', 'user_shared_liked', 'faq');
 
 		$this->dateNow = date('Ymd');
 	}
@@ -62,8 +62,18 @@ class CampaignsController extends AppController {
 
 			$user = FB::getUser();
 			if($user) {
+				$refferalId = null;
 				if($this->_check_user_register($user, $campaignSlug) == false || $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) == null || $this->_check_user_shared($user, $campaignSlug) == false) {
-					$this->redirect('/campaigns/register/' . $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
+					$userData = $this->CampaignUser->find('first', array(
+							'conditions' => array(
+								'CampaignUser.facebook_id' => $user
+							)
+						)
+					);
+					if(!empty($userData)) {
+						$refferalId = 'refferal=' . $userData['CampaignUser']['id'] . '&caption=' . $userData['Campaign']['title'] . '&';
+					}
+					$this->redirect('/campaigns/register/' . $campaignSlug . '?' . $refferalId . 'signed_request=' . $this->params->query['signed_request']);
 				} else {
 					$this->redirect('/campaignUsers/view/' . $campaignSlug);
 				}
@@ -76,65 +86,70 @@ class CampaignsController extends AppController {
 	public function register($campaignSlug = null) {
 		$this->layout = 'register';
 		
-		App::uses('FB', 'Facebook.Lib');
+		if(isset($this->params->query['signed_request']) && !empty($this->params->query['signed_request']) && $this->_check_campaign_closed($campaignSlug) == false) {
+			App::uses('FB', 'Facebook.Lib');
 
-		$this->loadModel('CampaignUser');
+			$this->loadModel('CampaignUser');
 
-		$refferalId = null;
-		$userName = null;
-		$userEmail = null;
-		$user = FB::getUser();
-		if($user) {
-			if($this->_check_user_register($user, $campaignSlug) == true) {
-				$userData = $this->CampaignUser->find('first', array(
-						'conditions' => array(
-							'CampaignUser.facebook_id' => $user
-						)
-					)
-				);
-				$refferalId = $userData['CampaignUser']['id'];
-				$userName = $userData['CampaignUser']['name'];
-				$userEmail = $userData['CampaignUser']['email'];
-			}
-
-			$fbUser = FB::api('/' . $user);
-			if ($this->request->is('post')) {
-				if($this->_check_user_register($fbUser['id'], $campaignSlug) == false) {
-					$this->CampaignUser->create();
-
-					$campaignData = $this->Campaign->find('first', array(
+			$refferalId = null;
+			$userName = null;
+			$userEmail = null;
+			$user = FB::getUser();
+			if($user) {
+				if($this->_check_user_register($user, $campaignSlug) == true) {
+					$userData = $this->CampaignUser->find('first', array(
 							'conditions' => array(
-								'Campaign.slug' => $campaignSlug,
-								'Campaign.published' => true,
-								'Campaign.status' => true
+								'CampaignUser.facebook_id' => $user
 							)
 						)
 					);
+					$refferalId = 'refferal=' . $userData['CampaignUser']['id'] . '&';
+					$userName = $userData['CampaignUser']['name'];
+					$userEmail = $userData['CampaignUser']['email'];
+				}
 
-					$this->request->data['CampaignUser']['campaign_id'] = $campaignData['Campaign']['id'];
-					$this->request->data['CampaignUser']['facebook_id'] = $fbUser['id'];
-					$this->request->data['CampaignUser']['fb_name'] = $fbUser['username'];
-					$this->request->data['CampaignUser']['first_name'] = $fbUser['first_name'];
-					$this->request->data['CampaignUser']['last_name'] = $fbUser['last_name'];
-					$this->request->data['CampaignUser']['fb_email'] = $fbUser['email'];
-					$this->request->data['CampaignUser']['address'] = isset($fbUser['hometown']) ? $fbUser['hometown']['name'] : '';
-					$this->request->data['CampaignUser']['score'] = $campaignData['Campaign']['score'];
-					$this->request->data['CampaignUser']['refferal'] = $this->Session->read('User.refferal') == null ? 0 : $this->Session->read('User.refferal');
-					$this->request->data['CampaignUser']['shared'] = 0;
+				$fbUser = FB::api('/' . $user);
+				if ($this->request->is('post')) {
+					if($this->_check_user_register($fbUser['id'], $campaignSlug) == false) {
+						$this->CampaignUser->create();
 
-					if ($this->CampaignUser->save($this->request->data)) {
-						$refferalId = $this->CampaignUser->getInsertID();
-						// Add user refferal score
-						$this->_user_refferal($campaignData['Campaign']['refferal']);
-						// $this->Session->write('CampaignUser.facebook_id', $fbUser['id']);
-						// $this->Session->write('CampaignUser.name', $fbUser['name']);
-						// $this->Session->write('CampaignUser.email', $fbUser['email']);
-						$this->Session->setFlash(__('The campaign has been saved'), 'flash_success');
-						$this->redirect('/campaigns/user_process/' . $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
-					} else {
-						$this->Session->setFlash(__('The campaign could not be saved. Please, try again.'), 'flash_error');
+						$campaignData = $this->Campaign->find('first', array(
+								'conditions' => array(
+									'Campaign.slug' => $campaignSlug,
+									'Campaign.published' => true,
+									'Campaign.status' => true
+								)
+							)
+						);
+
+						$this->request->data['CampaignUser']['campaign_id'] = $campaignData['Campaign']['id'];
+						$this->request->data['CampaignUser']['facebook_id'] = $fbUser['id'];
+						$this->request->data['CampaignUser']['fb_name'] = $fbUser['username'];
+						$this->request->data['CampaignUser']['first_name'] = $fbUser['first_name'];
+						$this->request->data['CampaignUser']['last_name'] = $fbUser['last_name'];
+						$this->request->data['CampaignUser']['fb_email'] = $fbUser['email'];
+						$this->request->data['CampaignUser']['address'] = isset($fbUser['hometown']) ? $fbUser['hometown']['name'] : '';
+						$this->request->data['CampaignUser']['score'] = $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) != null ? $campaignData['Campaign']['score'] + $campaignData['Campaign']['score'] : $campaignData['Campaign']['score'];
+						$this->request->data['CampaignUser']['refferal'] = $this->Session->read('User.refferal') == null ? 0 : $this->Session->read('User.refferal');
+						$this->request->data['CampaignUser']['liked'] = $this->_check_fb_like($user, Configure::read('FB_RAJAKAMAR')) == null ? 0 : 1;
+						$this->request->data['CampaignUser']['shared'] = 0;
+
+						if ($this->CampaignUser->save($this->request->data)) {
+							$refferalId = $this->CampaignUser->getInsertID();
+							// Add user refferal score
+							$this->_user_refferal($campaignData['Campaign']['refferal']);
+							// $this->Session->write('CampaignUser.facebook_id', $fbUser['id']);
+							// $this->Session->write('CampaignUser.name', $fbUser['name']);
+							// $this->Session->write('CampaignUser.email', $fbUser['email']);
+							$this->Session->setFlash(__('The user has been saved'), 'flash_success');
+							$this->redirect('/campaigns/user_process/' . $campaignSlug . '?refferal=' . $refferalId . '&signed_request=' . $this->params->query['signed_request']);
+						} else {
+							$this->Session->setFlash(__('The user could not be saved. Please, try again.'), 'flash_error');
+						}
 					}
 				}
+			} else {
+				$this->redirect('/campaigns/' . $campaignSlug);
 			}
 		} else {
 			$this->redirect('/campaigns/' . $campaignSlug);
@@ -143,16 +158,19 @@ class CampaignsController extends AppController {
 		$this->set('fbName', $userName == null ? $fbUser['name'] : $userName);
 		$this->set('fbEmail', $userEmail == null ? $fbUser['email'] : $userEmail);
 
-		$this->set('refferalId', $campaignSlug . '?refferal=' . $refferalId);
 		$this->set('registered', $this->_check_user_register($fbUser['id'], $campaignSlug) == true ? true : false);
-		$this->set('campaignSlug', $campaignSlug . '?signed_request=' . $this->params->query['signed_request']);
+		$this->set('campaignSlug', $campaignSlug . '?' . $refferalId . 'signed_request=' . $this->params->query['signed_request']);
 	}
 
-	public function user_shared($campaignSlug = null) {
+	public function faq() {
+		$this->layout = 'faq';
+	}
+
+	public function user_shared_liked($campaignSlug = null) {
 		$this->loadModel('CampaignUser');
 
 		if(isset($this->params->query['signed_request']) && !empty($this->params->query['signed_request'])) {
-			if(isset($this->params->query['user_shared']) && $this->params->query['user_shared'] == 1) {
+			if(isset($this->params->query['user_shared']) || isset($this->params->query['user_liked'])) {
 				$user = FB::getUser();
 				if($user) {
 					$campaignId = $this->Campaign->find('first', array(
@@ -171,10 +189,15 @@ class CampaignsController extends AppController {
 					);
 
 					if(!empty($user)) {
-						if($user['CampaignUser']['shared'] == 0) {
-							$campaign['CampaignUser']['id'] = $user['CampaignUser']['id'];
+						$campaign['CampaignUser']['id'] = $user['CampaignUser']['id'];
+						if(isset($this->params->query['user_liked']) && $this->params->query['user_liked'] == 1 && $user['CampaignUser']['liked'] == 0) {
+							$campaign['CampaignUser']['liked'] = true;
+							$campaign['CampaignUser']['score'] = $user['CampaignUser']['score'] + $campaignId['Campaign']['score'];
+							$this->CampaignUser->save($campaign);
+						}
+						if(isset($this->params->query['user_shared']) && $this->params->query['user_shared'] == 1 && $user['CampaignUser']['shared'] == 0) {
 							$campaign['CampaignUser']['shared'] = true;
-
+							$campaign['CampaignUser']['score'] = $user['CampaignUser']['score'] + $campaignId['Campaign']['score'];
 							$this->CampaignUser->save($campaign);
 						}
 
@@ -204,7 +227,7 @@ class CampaignsController extends AppController {
 				'conditions' => array(
 					'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
 					'CampaignUser.facebook_id' => $fbUserId,
-					'CampaignUser.status' => 1
+					'CampaignUser.shared' => 1
 				)
 			)
 		);
@@ -275,7 +298,7 @@ class CampaignsController extends AppController {
 		return ($isFan != null && isset($isFan[0]) ? $isFan[0]['uid'] : null);
 	}
 
-	private function _check_campaign_status($campaignSlug = null) {
+	private function _check_campaign_closed($campaignSlug = null) {
 		$campaignData = $this->Campaign->find('first',
 			array(
 				'conditions' => array(
@@ -285,7 +308,7 @@ class CampaignsController extends AppController {
 			)
 		);
 
-		return $campaignData['Campaign']['status'] == 0 ? false : true;
+		return $campaignData['Campaign']['status'] == 0 ? true : false;
 	}
 
 	private function _check_campaign($campaignSlug = null) {

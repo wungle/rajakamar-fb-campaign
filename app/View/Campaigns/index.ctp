@@ -19,7 +19,7 @@
 			</map>
     	</div>
         <div class="faq">
-          	<a href="index_faq.html"><img src="/main/images/sk.png" width="250" height="83" alt="FAQ" /></a>
+          	<a href="/campaigns/faq"><img src="/main/images/sk.png" width="250" height="83" alt="FAQ" /></a>
         </div>
 	</div>
     <div style="clear: both; padding-top:30px;"id="footer">

@@ -496,7 +496,10 @@ class FacebookHelper extends AppHelper {
 	*/
 	
 	public function init($options = null, $reload = true) {
-		$campaign = isset($this->params->pass[0]) && isset($this->params->query['signed_request']) ? $this->params->pass[0] . '?signed_request=' . $this->params->query['signed_request'] : '';
+		$campaignRequest = isset($this->params->pass[0]) && isset($this->params->query['signed_request']) ? $this->params->pass[0] . '?signed_request=' . $this->params->query['signed_request'] : '';
+		$refferalId = isset($this->params->query['refferal']) ? $this->params->query['refferal'] : '';
+		$campaign = isset($this->params->pass[0]) ? $this->params->pass[0] : '';
+		$caption = isset($this->params->query['caption']) ? $this->params->query['caption'] : '';
 
 		$options = array_merge(array(
 			'perms' => 'email,user_likes,publish_actions'
@@ -546,7 +549,7 @@ class FacebookHelper extends AppHelper {
 		// Like button
 		FB.Event.subscribe('edge.create',
 		    function(response) {
-		        location.href = 'http://rajakamar.local/campaigns/user_process/" . $campaign . "';
+		        location.href = 'http://rajakamar.local/campaigns/user_shared_liked/" . $campaignRequest . "&user_liked=1';
 		    }
 		);
 	};
@@ -568,17 +571,37 @@ class FacebookHelper extends AppHelper {
 			{
 				method: 'feed',
 				name: 'Raja Kamar',
-				link: '" . Router::url('/', true) . "campaigns/',
-				picture: 'http://fbrell.com/f8.jpg',
-				caption: 'Reference Documentation',
-				description: 'Dialogs provide a simple, consistent interface for applications to interface with users.',
-				message: 'Facebook Dialogs are easy!'
+				link: '" . Router::url('/', true) . "campaigns/" . $campaign . "?refferal=" . $refferalId . "',
+				picture: '" . Router::url('/main/images/share_image.jpg', true) . "',
+				caption: '" . $caption . "',
+				description: 'Aku baru saja like Rajakamar & ikut Singapore 360 Exploration. Ayo ikut like & share untuk dapatkan kesempatan liburan ke Singapore bersama 2 orang lainnya!',
+				message: 'Aku baru saja like Rajakamar & ikut Singapore 360 Exploration. Ayo ikut like & share untuk dapatkan kesempatan liburan ke Singapore bersama 2 orang lainnya!'
 			},
 			function(response) {
 				if (response && response.post_id) {
-			        location.href = 'http://rajakamar.local/campaigns/user_shared/" . $campaign . "&user_shared=1';
+			        location.href = 'http://rajakamar.local/campaigns/user_shared_liked/" . $campaignRequest . "&user_shared=1';
 				} else {
 					alert('Sorry, Please post to your wall.');
+				}
+			}
+		);
+	}
+
+	// Share button
+	function share_refferal(refferal, caption) {
+		FB.ui(
+			{
+				method: 'feed',
+				name: 'Raja Kamar',
+				link: '" . Router::url('/', true) . "campaigns/' + refferal,
+				picture: '" . Router::url('/main/images/share_image.jpg', true) . "',
+				caption: '' + caption,
+				description: 'Ayo, dukung aku like Rajakamar & share status ini, jadilah pemenang Singapore 360 Exploration & cetak poinmu sendiri. Ajak teman-temanmu untuk like, dan dapatkan kesempatan berlibur ke Singapore bersama 2 orang lainnya!',
+				message: 'Ayo, dukung aku like Rajakamar & share status ini, jadilah pemenang Singapore 360 Exploration & cetak poinmu sendiri. Ajak teman-temanmu untuk like, dan dapatkan kesempatan berlibur ke Singapore bersama 2 orang lainnya!'
+			},
+			function(response) {
+				if (response && response.post_id) {
+			        location.href = 'http://rajakamar.local/campaignUsers/" . $campaign . "';
 				}
 			}
 		);

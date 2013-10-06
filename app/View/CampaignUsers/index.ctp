@@ -23,12 +23,18 @@
         <div style="clear: both;">
             &nbsp;
         </div>
+
+        <!-- Message -->
+        <?php echo $this->Session->flash(); ?>
+
         <span>Kamu punya kesempatan untuk berlibur ke Singapura 3 hari 2 malam. Semua akomodasi ditanggung Rajakamar.
         </span>
         <div id="login_now" style="padding-top: 20px;">
-            <form style="" id="Form1">
-                <input type="button" onclick="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>');" value='Daftar' />
-            </form>
+            <?php if($campaignClosed == false) { ?>
+                <form style="" id="Form1">
+                    <input type="button" onclick="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>');" value='Daftar' />
+                </form>
+            <?php } ?>
         </div>
     </div>
     <div style="clear:both; padding-top:10px;">
@@ -60,15 +66,17 @@
         </form>
     </div>
 
-    <div class="pagination pagination-small pagination-centered">
-    	<ul>
-			<?php
-				echo $this->Paginator->prev(__('«'), array('tag' => 'li', 'disabledTag' => 'span', 'escape' => false));
-				echo $this->Paginator->numbers(array('separator' => '', 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a'));
-				echo $this->Paginator->next(__('»'), array('tag' => 'li', 'disabledTag' => 'span', 'escape' => false));
-			?>
-		</ul>
-	</div>
+    <?php if ( ($this->Paginator->counter() != "1 of 1") && ($this->Paginator->counter() != "0 of 1")) { ?>
+        <div class="pagination pagination-small pagination-centered">
+        	<ul>
+    			<?php
+    				echo $this->Paginator->prev(__('«'), array('tag' => 'li', 'disabledTag' => 'span', 'escape' => false));
+    				echo $this->Paginator->numbers(array('separator' => '', 'tag' => 'li', 'currentClass' => 'active', 'currentTag' => 'a'));
+    				echo $this->Paginator->next(__('»'), array('tag' => 'li', 'disabledTag' => 'span', 'escape' => false));
+    			?>
+    		</ul>
+    	</div>
+    <?php } ?>
     <div style="clear: both; padding-top: 30px;" id="footer">
         <p style="color: #999; font-size: 11px;">copyright &copy; RajaKamar 2012 All Rights Reserved.</p>
     </div>

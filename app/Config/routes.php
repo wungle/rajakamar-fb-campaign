@@ -30,8 +30,9 @@
 	// Campaigns
 	Router::connect('/campaigns/user_process/*', array('controller' => 'campaigns', 'action' => 'user_process', 'admin' => false));
 	Router::connect('/campaigns/register/*', array('controller' => 'campaigns', 'action' => 'register', 'admin' => false));
-	Router::connect('/campaigns/user_shared/*', array('controller' => 'campaigns', 'action' => 'user_shared', 'admin' => false));
+	Router::connect('/campaigns/user_shared_liked/*', array('controller' => 'campaigns', 'action' => 'user_shared_liked', 'admin' => false));
 	Router::connect('/campaigns/user/*', array('controller' => 'campaigns', 'action' => 'user', 'admin' => false));
+	Router::connect('/campaigns/faq', array('controller' => 'campaigns', 'action' => 'faq', 'admin' => false));
 	Router::connect('/campaigns/*', array('controller' => 'campaigns', 'action' => 'index', 'admin' => false));
 	// Campaign User
 	Router::connect('/campaignUsers/view/*', array('controller' => 'campaignUsers', 'action' => 'view', 'admin' => false));

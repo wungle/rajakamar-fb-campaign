@@ -12,8 +12,6 @@ Jumlah Referal : <?php echo ($refferal == null ? 0 : $refferal); ?>
 <br>
 <br>
 
-<?php if($campaignClosed == true) { ?>
-	<?php echo $this->Facebook->share(Router::url('/', true) . 'campaigns/' . $refferalId); //(default is the current page). ?>
-<?php } ?>
+<?php echo $this->Html->link($this->Html->image('/main/images/facebookShare.png'), '#', array('onclick' => 'share_refferal(\'' . $refferalId . '\', \'' . $campaignTitle . '\')', 'escape' => false)); ?>
 
-<a onclick="share_me()">Test</a>
+<?php echo $this->Html->link('Back to scores', '/campaignUsers/' . $campaignSlug); ?>

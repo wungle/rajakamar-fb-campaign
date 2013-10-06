@@ -36,7 +36,11 @@
 	Router::connect('/campaigns/*', array('controller' => 'campaigns', 'action' => 'index', 'admin' => false));
 	// Campaign User
 	Router::connect('/campaignUsers/view/*', array('controller' => 'campaignUsers', 'action' => 'view', 'admin' => false));
+	Router::connect('/campaign_users/view/*', array('controller' => 'campaignUsers', 'action' => 'view', 'admin' => false));
+	Router::connect('/campaignUsers/search/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
+	Router::connect('/campaign_users/search/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
 	Router::connect('/campaignUsers/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
+	Router::connect('/campaign_users/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */

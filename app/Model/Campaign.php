@@ -65,12 +65,12 @@ class Campaign extends AppModel {
 		)
 	);
 
-	function beforeValidate() {
+	function beforeValidate($options = array()) {
 		$this->data['Campaign']['name'] = preg_replace('/\s+/', ' ', $this->data['Campaign']['name']);
 	}
 
 	// Do before save
-	function beforeSave() {
+	function beforeSave($options = array()) {
 		$this->data['Campaign']['slug'] = Inflector::slug($this->data['Campaign']['name']);
 	}
 

@@ -15,8 +15,8 @@
     </div>
     <div style="border-bottom: 1px dotted #999; margin: 0 auto; width: 900px; padding-top: 25px;" class="clearfix">
     </div>
-    <?php echo $this->Form->create('CampaignUser', array('action' => 'search', 'class' => 'form-wrapper cf')); ?>
-    	<?php echo $this->Form->input('CampaignUser.keyword', array('placeholder' => 'Cari berdasarkan nama...', 'label' => false)); ?>
+    <?php echo $this->Form->create('CampaignUsers', array('action' => 'search/' . $campaignSlug, 'class' => 'form-wrapper cf')); ?>
+    	<?php echo $this->Form->input('CampaignUser.keyword', array('placeholder' => 'Cari berdasarkan nama, skor dan refferal...', 'label' => false)); ?>
         <button type="submit">Cari</button>
     <?php echo $this->Form->end(); ?>
     <div class="campaign">

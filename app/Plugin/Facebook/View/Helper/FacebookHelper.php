@@ -549,7 +549,7 @@ class FacebookHelper extends AppHelper {
 		// Like button
 		FB.Event.subscribe('edge.create',
 		    function(response) {
-		        location.href = 'http://rajakamar.local/campaigns/user_shared_liked/" . $campaignRequest . "&user_liked=1';
+		        location.href = '" . Router::url('/', true) . "campaigns/user_shared_liked/" . $campaignRequest . "&user_liked=1';
 		    }
 		);
 	};
@@ -579,7 +579,7 @@ class FacebookHelper extends AppHelper {
 			},
 			function(response) {
 				if (response && response.post_id) {
-			        location.href = 'http://rajakamar.local/campaigns/user_shared_liked/" . $campaignRequest . "&user_shared=1';
+			        location.href = '" . Router::url('/', true) . "/campaigns/user_shared_liked/" . $campaignRequest . "&user_shared=1';
 				} else {
 					alert('Sorry, Please post to your wall.');
 				}
@@ -601,7 +601,7 @@ class FacebookHelper extends AppHelper {
 			},
 			function(response) {
 				if (response && response.post_id) {
-			        location.href = 'http://rajakamar.local/campaignUsers/" . $campaign . "';
+			        location.href = '" . Router::url('/', true) . "campaignUsers/" . $campaign . "';
 				}
 			}
 		);

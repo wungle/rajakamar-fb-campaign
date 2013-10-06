@@ -16,6 +16,13 @@ class CampaignUser extends AppModel {
 	public $displayField = 'name';
 
 
+	public $validate = array(
+		'keyword' => array(
+			'rule' => 'notEmpty',
+			'message' => 'This field cannot be left blank.'
+		)
+	);
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**

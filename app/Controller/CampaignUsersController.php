@@ -13,7 +13,7 @@ class CampaignUsersController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->Auth->allow('index', 'view', 'search');
+		$this->Auth->allow('index', 'view');
 	}
 
 /**
@@ -33,10 +33,21 @@ class CampaignUsersController extends AppController {
 			$this->redirect('/campaigns/' . $campaignSlug);
 		}
 
+		$keyword = '';
+		if($this->request->is('post') && isset($this->request->data['CampaignUser']['keyword'])) {
+			$keyword = $this->request->data['CampaignUser']['keyword'];
+		}
+
 		$this->CampaignUser->unBindModel(array('belongsTo' => array('Campaign')));
 		$this->paginate = array(
 			'conditions' => array(
-				'CampaignUser.campaign_id' => $campaign['Campaign']['id']
+				'CampaignUser.campaign_id' => $campaign['Campaign']['id'],
+				'OR' => array(
+					'CampaignUser.name LIKE' => '%' . $keyword . '%',
+					'CampaignUser.fb_name LIKE' => '%' . $keyword . '%',
+					'CampaignUser.score LIKE' => '%' . $keyword . '%',
+					'CampaignUser.refferal LIKE' => '%' . $keyword . '%',
+				)
 			),
 			'limit' => 15,
 			'order' => array(
@@ -47,12 +58,6 @@ class CampaignUsersController extends AppController {
 		$this->set('campaignClosed', $this->_check_campaign_closed($campaignSlug));
 		$this->set('campaignSlug', $campaignSlug);
 		$this->set('campaignUsers', $this->paginate());
-	}
-
-	public function search($keyword = null) {
-		if ($this->request->is('post')) {
-
-		}
 	}
 
 /**

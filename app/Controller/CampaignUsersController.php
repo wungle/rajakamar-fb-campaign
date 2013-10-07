@@ -13,7 +13,7 @@ class CampaignUsersController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->Auth->allow('index', 'view');
+		$this->Auth->allow('index', 'view', 'share_score');
 	}
 
 /**
@@ -113,14 +113,78 @@ class CampaignUsersController extends AppController {
 			)
 		);
 
+		if($this->_check_last_shared($user, $campaignSlug) == false) {
+			$diff = strtotime('now') - strtotime($userData['CampaignUser']['last_shared']);
+			$this->set('shareTime', date('H:i:s', strtotime('06:00:00') - $diff));
+		}
+
 		$this->set('fbId', $user);
 		$this->set('fbName', $fbUser['name']);
 		$this->set('score', $userData['CampaignUser']['score']);
 		$this->set('refferal', $refferal);
 		$this->set('refferalId', $campaignSlug . '?refferal=' . $userData['CampaignUser']['id']);
 		$this->set('campaignClosed', $this->_check_campaign_closed($campaignSlug));
+		$this->set('campaignShared', $this->_check_last_shared($user, $campaignSlug));
 		$this->set('campaignSlug', $campaignSlug);
 		$this->set('campaignTitle', $campaignId['Campaign']['title']);
+	}
+
+	public function share_score($campaignSlug = null) {
+		if($this->_check_campaign_closed($campaignSlug) == true) {
+			$this->Session->setFlash(__('Sorry, the campaign is closed'));
+			$this->redirect('campaignUsers/view/' . $campaignSlug);
+		}
+
+		$user = FB::getUser();
+		if($user) {
+			$this->loadModel('Campaign');
+
+			$campaignId = $this->Campaign->find('first', array(
+					'conditions' => array(
+						'Campaign.slug' => $campaignSlug
+					)
+				)
+			);
+
+			$campaignUser = $this->CampaignUser->find('first', array(
+					'conditions' => array(
+						'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
+						'CampaignUser.facebook_id' => $user
+					)
+				)
+			);
+
+			if($this->_check_last_shared($user, $campaignSlug) == true) {
+				$campaign['CampaignUser']['id'] = $campaignUser['CampaignUser']['id'];
+				$campaign['CampaignUser']['score'] = $campaignUser['CampaignUser']['score'] + $campaignId['Campaign']['score'];
+				$campaign['CampaignUser']['last_shared'] = date('Y-m-d H:i:s');
+
+				$this->CampaignUser->save($campaign);
+			}
+		}
+
+		$this->redirect('/campaignUsers/view/' . $campaignSlug);
+	}
+
+	private function _check_last_shared($fbUserId = null, $campaignSlug = null) {
+		$this->loadModel('Campaign');
+
+		$campaignId = $this->Campaign->find('first', array(
+				'conditions' => array(
+					'Campaign.slug' => $campaignSlug
+				)
+			)
+		);
+
+		$campaignUser = $this->CampaignUser->find('first', array(
+				'conditions' => array(
+					'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
+					'CampaignUser.facebook_id' => $fbUserId
+				)
+			)
+		);
+
+		return strtotime($campaignUser['CampaignUser']['last_shared']) < strtotime('-6 hour') ? true : false;
 	}
 
 	private function _check_user_register($fbUserId = null, $campaignSlug = null) {
@@ -145,6 +209,8 @@ class CampaignUsersController extends AppController {
 	}
 
 	private function _check_campaign_closed($campaignSlug = null) {
+		$this->loadModel('Campaign');
+
 		$campaignData = $this->Campaign->find('first',
 			array(
 				'conditions' => array(
@@ -158,7 +224,7 @@ class CampaignUsersController extends AppController {
 	}
 
 	private function _check_user_shared_liked($fbUserId = null, $campaignSlug = null) {
-		$this->loadModel('CampaignUser');
+		$this->loadModel('Campaign');
 
 		$campaignId = $this->Campaign->find('first', array(
 				'conditions' => array(

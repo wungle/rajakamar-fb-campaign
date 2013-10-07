@@ -580,13 +580,37 @@ class FacebookHelper extends AppHelper {
 		};
 
 		FB.api('/me/feed', 'POST', publish, function(response) {  
-			if (response && response.id) {
+			if (response && response.post_id) {
 		        location.href = '" . Router::url('/', true) . "/campaigns/user_shared_liked/" . $campaignRequest . "&user_shared=1';
 			} else {
 				alert('Sorry, Please post to your wall.');
 			}
 		});
 	};
+	
+	// function share_me() {
+	// 	// Check if sdk loaded
+	// 	checkIfLoaded();
+
+	// 	FB.ui(
+	// 		{
+	// 			method: 'feed',
+	// 			name: 'Raja Kamar',
+	// 			link: '" . Router::url('/', true) . "campaigns/" . $campaign . "?refferal=" . $refferalId . "',
+	// 			picture: '" . Router::url('/main/images/share_image.jpg', true) . "',
+	// 			caption: '" . $caption . "',
+	// 			description: 'Aku baru saja like Rajakamar & ikut Singapore 360 Exploration. Ayo ikut like & share untuk dapatkan kesempatan liburan ke Singapore bersama 2 orang lainnya!',
+	// 			message: 'Aku baru saja like Rajakamar & ikut Singapore 360 Exploration. Ayo ikut like & share untuk dapatkan kesempatan liburan ke Singapore bersama 2 orang lainnya!'
+	// 		},
+	// 		function(response) {
+	// 			if (response && response.post_id) {
+	// 		        location.href = '" . Router::url('/', true) . "/campaigns/user_shared_liked/" . $campaignRequest . "&user_shared=1';
+	// 			} else {
+	// 				alert('Sorry, Please post to your wall.');
+	// 			}
+	// 		}
+	// 	);
+	// }
 
 	// Share button refferal
 	function share_refferal(refferal, caption) {
@@ -608,6 +632,28 @@ class FacebookHelper extends AppHelper {
 			}
 		});
 	};
+
+	// function share_refferal(refferal, caption) {
+	// 	// Check if sdk loaded
+	// 	checkIfLoaded();
+
+	// 	FB.ui(
+	// 		{
+	// 			method: 'feed',
+	// 			name: 'Raja Kamar',
+	// 			link: '" . Router::url('/', true) . "campaigns/' + refferal,
+	// 			picture: '" . Router::url('/main/images/share_image.jpg', true) . "',
+	// 			caption: '' + caption,
+	// 			description: 'Ayo, dukung aku like Rajakamar & share status ini, jadilah pemenang Singapore 360 Exploration & cetak poinmu sendiri. Ajak teman-temanmu untuk like, dan dapatkan kesempatan berlibur ke Singapore bersama 2 orang lainnya!',
+	// 			message: 'Ayo, dukung aku like Rajakamar & share status ini, jadilah pemenang Singapore 360 Exploration & cetak poinmu sendiri. Ajak teman-temanmu untuk like, dan dapatkan kesempatan berlibur ke Singapore bersama 2 orang lainnya!'
+	// 		},
+	// 		function(response) {
+	// 			if (response && response.post_id) {
+	// 		        location.href = '" . Router::url('/', true) . "campaignUsers/" . $campaign . "';
+	// 			}
+	// 		}
+	// 	);
+	// }
 
 	// logs the user in the application and facebook
 	function login(redirection){

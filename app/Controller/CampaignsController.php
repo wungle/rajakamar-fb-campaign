@@ -199,11 +199,14 @@ class CampaignsController extends AppController {
 						if(isset($this->params->query['user_liked']) && $this->params->query['user_liked'] == 1 && $user['CampaignUser']['liked'] == 0) {
 							$campaign['CampaignUser']['liked'] = true;
 							$campaign['CampaignUser']['score'] = $user['CampaignUser']['score'] + $campaignId['Campaign']['score'];
+							
 							$this->CampaignUser->save($campaign);
 						}
 						if(isset($this->params->query['user_shared']) && $this->params->query['user_shared'] == 1 && $user['CampaignUser']['shared'] == 0) {
 							$campaign['CampaignUser']['shared'] = true;
 							$campaign['CampaignUser']['score'] = $user['CampaignUser']['score'] + $campaignId['Campaign']['score'];
+							$campaign['CampaignUser']['last_shared'] = date('Y-m-d H:i:s');
+
 							$this->CampaignUser->save($campaign);
 						}
 

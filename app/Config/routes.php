@@ -37,6 +37,8 @@
 	// Campaign User
 	Router::connect('/campaignUsers/view/*', array('controller' => 'campaignUsers', 'action' => 'view', 'admin' => false));
 	Router::connect('/campaign_users/view/*', array('controller' => 'campaignUsers', 'action' => 'view', 'admin' => false));
+	Router::connect('/campaignUsers/share_score/*', array('controller' => 'campaignUsers', 'action' => 'share_score', 'admin' => false));
+	Router::connect('/campaign_users/share_score/*', array('controller' => 'campaignUsers', 'action' => 'share_score', 'admin' => false));
 	Router::connect('/campaignUsers/search/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
 	Router::connect('/campaign_users/search/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));
 	Router::connect('/campaignUsers/*', array('controller' => 'campaignUsers', 'action' => 'index', 'admin' => false));

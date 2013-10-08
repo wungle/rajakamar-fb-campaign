@@ -19,22 +19,7 @@
             	<a href="http://www.rajakamar.com/"><img src="/main/images/Logo-Rajakamar.png" width="250" height="76" alt="Logo" /></a>
           	</div>
             <div style="padding-top:150px;"class="clearfix"></div>
-           	<div id="header_title">
-            	<img src="/main/images/title.png" width="900" height="77" alt="header-title" />
-            </div>
-    		<div style="border-bottom:2px dotted #999; margin:0 auto; width:900px; padding-top:25px;"class="clearfix"></div>
-          	<div class="campaign">
-				<?php if($campaignClosed == false) { ?>
-		          	<h1>Belum ikutan?</h1>
-		          	<p>Segera daftarkan diri kamu untuk ikut Singapore 360 Exploration, dan dapatkan kesempatan untuk liburan ke Singapore bersama Rajakamar! Pesawat, hotel, dan akomodasinya ditanggung Rajakamar!</p>
-	        	<?php } else { ?>
-		          	<h1>Sorry, campaign is closed!!!</h1>
-		        <?php } ?>
-            </div>
 
-            <?php echo $this->Session->flash(); ?>
-
-            <!-- Content -->
 			<?php echo $this->fetch('content'); ?>
 
 		</div>

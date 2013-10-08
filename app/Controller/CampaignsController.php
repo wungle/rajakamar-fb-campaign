@@ -45,7 +45,7 @@ class CampaignsController extends AppController {
 
 		$campaignData = $this->_check_campaign($campaignSlug);
 
-		if(empty($campaignData['Campaign']['slug'])) {
+		if(empty($campaignData['Campaign']['slug']) || $this->_set_campaign_closed($campaignData['Campaign']['slug']) == true) {
 			$this->redirect(Configure::read('SITE_RAJAKAMAR'));
 		}
 
@@ -117,7 +117,7 @@ class CampaignsController extends AppController {
 								'conditions' => array(
 									'Campaign.slug' => $campaignSlug,
 									'Campaign.published' => true,
-									'Campaign.status' => true
+									'Campaign.is_closed' => false
 								)
 							)
 						);
@@ -282,17 +282,7 @@ class CampaignsController extends AppController {
 				$data['CampaignUser']['id'] = $this->Session->read('User.refferal');
 				$data['CampaignUser']['score'] = $user['CampaignUser']['score'] + $refScore;
 
-				if($this->CampaignUser->save($data)) {
-					// Check campaign closed
-
-					if($data['CampaignUser']['score'] >= $user['Campaign']['max_score']) {
-						$campaign['Campaign']['id'] = $user['Campaign']['id'];
-						$campaign['Campaign']['name'] = $user['Campaign']['name'];
-						$campaign['Campaign']['status'] = 0;
-
-						$this->Campaign->save($campaign);
-					}
-				}
+				$this->CampaignUser->save($data);
 			}
 		}
 	}
@@ -307,17 +297,54 @@ class CampaignsController extends AppController {
 		return ($isFan != null && isset($isFan[0]) ? $isFan[0]['uid'] : null);
 	}
 
+	private function _set_campaign_closed($campaignSlug = null) {
+		$is_closed = false;
+
+		$campaignData = $this->Campaign->find('first',
+			array(
+				'conditions' => array(
+					'Campaign.slug' => $campaignSlug,
+					'Campaign.is_closed' => false
+				)
+			)
+		);
+
+		if(!empty($campaignData)) {
+			$pageLike = FB::api(array(
+				  	'method' => 'fql.query',
+		     		'query' => 'SELECT fan_count FROM page WHERE page_id = ' . Configure::read('FB_RAJAKAMAR')
+				)
+			);
+
+			if(isset($pageLike[0]) && !empty($pageLike[0]['fan_count'])) {
+				if($pageLike[0]['fan_count'] >= $campaignData['Campaign']['max_score']) {
+				// if($data['CampaignUser']['score'] >= $campaignData['Campaign']['max_score']) {
+					$campaign['Campaign']['id'] = $campaignData['Campaign']['id'];
+					$campaign['Campaign']['name'] = $campaignData['Campaign']['name'];
+					$campaign['Campaign']['is_closed'] = true;
+
+					if($this->Campaign->save($campaign)) {
+						$is_closed = true;
+					}
+				}
+			}
+		}
+
+		return $is_closed;
+	}
+
 	private function _check_campaign_closed($campaignSlug = null) {
 		$campaignData = $this->Campaign->find('first',
 			array(
 				'conditions' => array(
 					'Campaign.slug' => $campaignSlug,
-					'Campaign.published' => true
+					'Campaign.published' => true,
+					'Campaign.is_closed' => false
 				)
 			)
 		);
 
-		return $campaignData['Campaign']['status'] == 0 ? true : false;
+		return !empty($campaignData) && $campaignData['Campaign']['is_closed'] == 0 ? false : true;
 	}
 
 	private function _check_campaign($campaignSlug = null) {
@@ -326,7 +353,7 @@ class CampaignsController extends AppController {
 				'conditions' => array(
 					'Campaign.slug' => $campaignSlug,
 					'Campaign.published' => true,
-					'Campaign.status' => true
+					'Campaign.is_closed' => false
 				)
 			)
 		);
@@ -335,7 +362,8 @@ class CampaignsController extends AppController {
 			$campaignData = $this->Campaign->find('first', array(
 					'conditions' => array(
 						'Campaign.published' => true,
-						'Campaign.status' => true
+						'Campaign.is_closed' => false,
+						'Campaign.is_default' => true
 					),
 					'order' => array(
 						'Campaign.publish_date >= ' . $this->dateNow
@@ -384,7 +412,11 @@ class CampaignsController extends AppController {
 	public function admin_add() {
 		if ($this->request->is('post')) {
 			$this->Campaign->create();
-			$this->request->data['Campaign']['status'] = 1;
+			$this->request->data['Campaign']['is_closed'] = false;
+			if($this->request->data['Campaign']['is_default'] == true) {
+				$this->Campaign->updateAll(array('Campaign.is_default' => false));
+			}
+
 			if ($this->Campaign->save($this->request->data)) {
 				$this->Session->setFlash(__('The campaign has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
@@ -408,6 +440,10 @@ class CampaignsController extends AppController {
 			throw new NotFoundException(__('Invalid campaign'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			if($this->request->data['Campaign']['is_default'] == true) {
+				$this->Campaign->updateAll(array('Campaign.is_default' => false));
+			}
+
 			if ($this->Campaign->save($this->request->data)) {
 				$this->Session->setFlash(__('The campaign has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));

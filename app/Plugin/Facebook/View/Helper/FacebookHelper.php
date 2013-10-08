@@ -595,7 +595,7 @@ class FacebookHelper extends AppHelper {
 
 		var publish = {
 			method: 'stream.publish',
-			message : 'Aku baru saja like Rajakamar & ikut Singapore 360 Exploration. Ayo ikut like & share untuk dapatkan kesempatan liburan ke Singapore bersama 2 orang lainnya!',
+			message : 'Ayo, dukung aku like Rajakamar & share status ini, jadilah pemenang Singapore 360 Exploration & cetak poinmu sendiri. Ajak teman-temanmu untuk like, dan dapatkan kesempatan berlibur ke Singapore bersama 2 orang lainnya!',
 			name: 'Raja Kamar',
 			link: '" . Router::url('/', true) . "campaigns/' + refferal,
 			picture: '" . Router::url('/main/images/share_image.jpg', true) . "',

@@ -126,11 +126,11 @@ body {
 #logo {
 	width: 250px;
 	height: 76px;
-	float: left;
 	outline: 0px;
-	margin-top: -90px;
+	margin:-90px auto;
 	padding-left: 10px;
 }
+
 
 #logo img {
 	border:none;
@@ -139,6 +139,8 @@ body {
 /*************** LOGIN ***************/
 
 #login_now {
+	padding-top:-50px;
+	padding-bottom:10px;
 	margin:0 auto;
 }
 
@@ -147,12 +149,11 @@ body {
 	margin: auto;
     border: none;
     background: url(../images/daftar_button.png) no-repeat;
-    width:172px;
-    height:48px;
+    width:460px;
+    height:62px;
     cursor: pointer;
-    font-size:20px;
+    font-size:28px;
     color:#663300;
-	font-weight:bold;
 	text-shadow: 1px 1px #ffffff;
 }
 
@@ -160,8 +161,8 @@ body {
 		margin: auto;
         background: url(../images/daftar_button_hover.png) no-repeat;
         border: none;
-        width:172px;
-        height:48px;
+		width:460px;
+		height:62px;
     }
 
 
@@ -171,11 +172,14 @@ body {
 /*************** SCORE BOARD ***************/
 
 .wrap-table1{
+	display:block;
+	text-align: center;
 	background: url(../images/skor_board.png) no-repeat;
 	width:650px;
 	height:850px;
 	font-size: 12px;
-	margin:-20px auto;
+	margin:100px auto;
+	padding:0;
 }
 
 .wrap-table1 img{
@@ -194,6 +198,7 @@ body {
 }
 
 table {
+	padding-left:0px;
 	line-height:15px;
     border-spacing: 0;
 }
@@ -223,15 +228,50 @@ table {
 
 /*************** END SCORE BOARD ***************/
 
+/*************** SCORE BOARD 2 ***************/
 
+#wrap-table1{
+	display:block;
+	text-align: center;
+	background: url(../images/skor_board.png) no-repeat;
+	width:650px;
+	height:850px;
+	font-size: 12px;
+	margin:100px auto;
+	padding:0;
+}
+
+#wrap-table1 img{
+	border:none;
+}
+
+#wrap-table1 .skorboard {
+	float:left;
+	margin-top:300px;
+	margin-left:70px;
+	background:url(../images/skor.png) no-repeat;
+	width:175px;
+	height: 145px;
+}
+
+#wrap-table1 .skorboard p {
+	font-size:25px;
+	color:#666;
+	font-weight:bold;
+	margin-top:50px;
+}
+
+
+
+
+/*************** END SCORE BOARD 2 ***************/
 
 
 /*************** SCORE BUTTON***************/
 
 
-
 #lihatskor {
-	margin-top:-10px;
+	margin-top:-100px;
 }
 
 
@@ -405,11 +445,20 @@ input a:hover {
 
 
 .campaign {
-	margin-top:50px;
+	margin-top:25px;
 }
 
-.campaign span {
-	font-size:14px;
+.campaign h1 {
+	font-size:40px;
+	font-weight:bold;
+	clear:both;
+}
+
+
+.campaign p {
+	margin-top:-15px;
+	padding: 10px;
+	font-size:18px;
 }
 
 
@@ -430,7 +479,7 @@ input a:hover {
 /*************** END OF FOOTER ***************/
 
 #FAQ {
-	margin-top: 10px;
+	margin-top:150px;
 	color: #000000;
 	font-size: 12px;
 	text-align: left;

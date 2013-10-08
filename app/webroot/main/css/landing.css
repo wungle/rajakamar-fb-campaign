@@ -42,19 +42,20 @@ img {
 }
 
 #landing-page {
-	margin-top:-100px;
+	margin-top:-150px;
 }
 
 #landing-page .landing-box {
-	margin-top:75px;
+	margin-top:190px;
 }
 
 #landing-page .faq {
 	float:left;
 	position:absolute;
-	margin-top:-165px;
+	margin-top:-125px;
 	margin-left:110px;
 	top: 772px;
+	display:block;
 }
 
 #landing-page .faq img {
@@ -86,9 +87,8 @@ img {
 #logo {
 	width: 250px;
 	height: 76px;
-	float: left;
 	outline: 0px;
-	margin-top: -90px;
+	margin:-90px auto;
 	padding-left: 10px;
 }
 
@@ -103,3 +103,39 @@ img {
 #footer P {
 	color: #000;
 }
+
+/*************** SCORE BUTTON***************/
+
+
+#lihatskor {
+	margin-top:-100px;
+}
+
+
+input[type="button"] {
+	margin: auto;
+    border: none;
+    background: url(../images/button-skor.png) no-repeat;
+    width:460px;
+    height:60px;
+    cursor: pointer;
+    font-size:28px;
+    color:#ffffff;
+	text-shadow: 1px 1px #137206;
+}
+
+
+input[type="button"]:hover {
+		margin: auto;
+        background: url(../images/button-skor-hover.png) no-repeat;
+        border: none;
+        width:460px;
+        height:60px;
+    }
+
+input a:hover {
+    text-decoration: none;
+}
+
+/*************** END SCORE BUTTON***************/
+

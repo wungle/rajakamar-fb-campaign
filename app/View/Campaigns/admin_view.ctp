@@ -32,7 +32,7 @@
 							&nbsp;
 						</dd>
 
-						<dt><?php echo __('Max Score'); ?></dt>
+						<dt><?php echo __('Max Like'); ?></dt>
 						<dd>
 							<?php echo $campaign['Campaign']['max_score']; ?>
 							&nbsp;
@@ -52,7 +52,13 @@
 
 						<dt><?php echo __('Status'); ?></dt>
 						<dd>
-							<?php echo ($campaign['Campaign']['status'] == 1 ? 'Open' : ''); ?>
+							<?php echo ($campaign['Campaign']['is_closed'] == 1 ? 'Open' : ''); ?>
+							&nbsp;
+						</dd>
+
+						<dt><?php echo __('Default'); ?></dt>
+						<dd>
+							<?php echo ($campaign['Campaign']['is_default'] == 1 ? 'Yes' : 'No'); ?>
 							&nbsp;
 						</dd>
 

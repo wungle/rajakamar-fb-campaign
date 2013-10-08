@@ -27,10 +27,17 @@ class CampaignUsersController extends AppController {
 		$this->loadModel('Campaign');
 
 		$this->Campaign->recursive = 0;
-		$campaign = $this->Campaign->find('first', array('conditions' => array('Campaign.slug' => $campaignSlug)));
+		$campaign = $this->Campaign->find('first', 
+			array(
+				'conditions' => array(
+					'Campaign.slug' => $campaignSlug,
+					'Campaign.published' => true,
+				)
+			)
+		);
 
 		if(empty($campaign)) {
-			$this->redirect('/campaigns/' . $campaignSlug);
+			$this->redirect(Configure::read('SITE_RAJAKAMAR'));
 		}
 
 		$keyword = '';
@@ -68,11 +75,26 @@ class CampaignUsersController extends AppController {
  * @return void
  */
 	public function view($campaignSlug = null) {
+		$this->layout = 'view_score';
 		App::uses('FB', 'Facebook.Lib');
 
 		$user = FB::getUser();
 		if(!$user) {
 			$this->redirect('/campaignUsers/' . $campaignSlug);
+		}
+
+		$this->loadModel('Campaign');
+
+		$campaignId = $this->Campaign->find('first', array(
+				'conditions' => array(
+					'Campaign.slug' => $campaignSlug,
+					'Campaign.published' => true,
+				)
+			)
+		);
+
+		if(empty($campaignId)) {
+			$this->redirect(Configure::read('SITE_RAJAKAMAR'));
 		}
 
 		if($this->_check_user_register($user, $campaignSlug) == false) {
@@ -86,15 +108,6 @@ class CampaignUsersController extends AppController {
 		}
 
 		$fbUser = FB::api('/' . $user);
-
-		$this->loadModel('Campaign');
-
-		$campaignId = $this->Campaign->find('first', array(
-				'conditions' => array(
-					'Campaign.slug' => $campaignSlug
-				)
-			)
-		);
 
 		$this->CampaignUser->unBindModel(array('belongsTo' => array('Campaign')));
 		$userData = $this->CampaignUser->find('first', array(
@@ -220,7 +233,7 @@ class CampaignUsersController extends AppController {
 			)
 		);
 
-		return $campaignData['Campaign']['status'] == 0 ? true : false;
+		return !empty($campaignData) && $campaignData['Campaign']['is_closed'] == 0 ? false : true;
 	}
 
 	private function _check_user_shared_liked($fbUserId = null, $campaignSlug = null) {

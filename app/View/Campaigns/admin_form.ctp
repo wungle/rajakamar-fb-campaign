@@ -56,7 +56,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="max_score">Max Score</label>
+								<label class="control-label" for="max_score">Max Like</label>
 								<div class="controls">
 									<?php echo $this->Form->input('max_score', array('type' => 'text', 'placeholder' => 'Enter max score here', 'class' => 'span2', 'label' => false, 'escape' => false)); ?>
 								</div>
@@ -77,16 +77,25 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="image">Image</label>
+								<label class="control-label" for="published">Published</label>
 								<div class="controls">
-									<?php echo $this->Form->input('image', array('type' => 'text', 'class' => 'span2', 'label' => false, 'escape' => false)); ?>
+									<?php echo $this->Form->input('published', array('label' => false, 'escape' => false)); ?>
 								</div>
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="published">Published</label>
+								<label class="control-label" for="is_default">Set Default</label>
 								<div class="controls">
-									<?php echo $this->Form->input('published', array('label' => false, 'escape' => false)); ?>
+									<?php echo $this->Form->input('is_default', array('label' => false, 'escape' => false)); ?>
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="control-group">
+								<label class="control-label" for="is_closed">Set Closed</label>
+								<div class="controls">
+									<?php echo $this->Form->input('is_closed', array('label' => false, 'escape' => false)); ?>
 								</div>
 							</div>
 

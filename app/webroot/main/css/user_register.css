@@ -1,0 +1,247 @@
+@charset "utf-8";
+/* CSS Document */
+
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+body {
+	margin: 0 auto;
+	padding:0;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	background: url(../images/bg.jpeg.jpg) repeat;
+}
+
+h3 {
+	font-size:24px;
+}
+
+h5 {
+	font-size:18px;
+}
+
+
+p {
+	font-size: 12px;
+	color: #FFF;
+}
+
+img {
+	border:none;
+}
+
+
+#container {
+	background-color: #FFF;
+	border: 1px solid #ebebeb;
+	text-align: center;
+	width: 970px;
+	margin: 0 auto;
+}
+
+#landing-page {
+	margin-top:-100px;
+}
+
+#landing-page .landing-box {
+	margin-top:75px;
+}
+
+#landing-page .faq {
+	float:left;
+	position:absolute;
+	margin-top:-165px;
+	margin-left:110px;
+	top: 772px;
+}
+
+#landing-page .faq img {
+	border:none;
+}
+
+#header_title img {
+	border: none;
+}
+
+
+
+
+#top-bg {
+	background: url(../images/bg.jpg) repeat-x;
+	height: 93px;
+}
+
+#logo {
+	width: 250px;
+	height: 76px;
+	outline: 0px;
+	margin:-90px auto;
+	padding-left: 10px;
+}
+
+#footer {
+	padding: 10px;
+	display: block;
+	clear: right;
+	margin-top:120px;
+	margin-bottom: 10px;
+}
+
+#footer P {
+	color: #000;
+}
+
+
+/* ---------- LOGIN FORM ---------- */
+
+.login {
+  position: relative;
+  margin:50px auto;
+  padding: 20px 20px 20px;
+  width: 310px;
+  background: white;
+  border: solid 1px #eee;
+}
+
+.login:before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.login h1 {
+  margin: -20px -20px 21px;
+  line-height: 40px;
+  font-size:18px;
+  font-weight: bold;
+  color: #66cc33;
+  text-align: center;
+  text-shadow: 0 1px white;
+  background: #f3f3f3;
+  border-bottom: 1px solid #cfcfcf;
+  border-radius: 3px 3px 0 0;
+  background-image: -webkit-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -moz-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -o-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: linear-gradient(to bottom, whiteffd, #eef2f5);
+  -webkit-box-shadow: 0 1px whitesmoke;
+  box-shadow: 0 1px whitesmoke;
+}
+
+.login p {
+  margin: 20px 0 0;
+}
+
+.login p:first-child {
+  margin-top: 0;
+}
+
+.login input[type=text], .login input[type=email] {
+  width: 278px;
+}
+
+.login p.remember_me {
+  float: left;
+  line-height: 31px;
+}
+
+.login p.remember_me label {
+  font-size: 12px;
+  color: #777;
+  cursor: pointer;
+}
+
+.login p.remember_me input {
+  position: relative;
+  bottom: 1px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.login p.submit {
+  text-align: right;
+}
+
+.login-help {
+  margin: 20px 0;
+  font-size: 11px;
+  color: white;
+  text-align: center;
+  text-shadow: 0 1px #2a85a1;
+}
+
+.login-help a {
+  color: #cce7fa;
+  text-decoration: none;
+}
+
+.login-help a:hover {
+  text-decoration: underline;
+}
+
+:-moz-placeholder {
+  color: #c9c9c9 !important;
+  font-size: 13px;
+}
+
+::-webkit-input-placeholder {
+  color: #ccc;
+  font-size: 13px;
+}
+
+input {
+  font-family: 'Lucida Grande', Tahoma, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+input[type=text], input[type=email] {
+  margin: 5px;
+  padding: 0 10px;
+  width: 200px;
+  height: 34px;
+  color: #404040;
+  background: white;
+  border: 1px solid;
+  border-color: #c4c4c4 #d1d1d1 #d4d4d4;
+  border-radius:5px;
+  -moz-outline-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+
+input[type=submit] {
+  height:34px;
+  min-width:100%;
+  font-size: 12px;
+  color: #fff;
+  background: #ffcc33;
+  border: 1px solid;
+  border-color:#eee;
+  border-radius:5px;
+  outline: 0;
+}
+
+input[type=submit]:hover {
+  background: #ff9900;
+}
+
+.lt-ie9 input[type=text], .lt-ie9 input[type=password] {
+  line-height: 34px;
+}
+/*************** END OF LOGIN FORM ***************/
+
+input#CampaignUserEmail[disabled='disabled'], input#CampaignUserName[disabled='disabled'] {
+  color: #cfcfcf;
+}

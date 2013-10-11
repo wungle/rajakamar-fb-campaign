@@ -13,7 +13,7 @@ class CampaignsController extends AppController {
 	function beforeFilter() {
 		parent::beforeFilter();
 
-		$this->Auth->allow('index', 'user_process', 'register', 'user', 'user_shared_liked', 'faq');
+		$this->Auth->allow('index', 'fb_landing_page', 'user_process', 'register', 'user', 'user_shared_liked', 'faq');
 
 		$this->dateNow = date('Ymd');
 	}
@@ -56,6 +56,20 @@ class CampaignsController extends AppController {
 		$this->set('campaignSlug', $campaignData['Campaign']['slug']);
 	}
 
+	public function fb_landing_page($campaignSlug = null) {
+		$this->layout = 'landing_page';
+
+		$campaignData = $this->_check_campaign($campaignSlug);
+
+		if(empty($campaignData['Campaign']['slug']) || $this->_set_campaign_closed($campaignData['Campaign']['slug']) == true) {
+			$this->redirect(Configure::read('SITE_RAJAKAMAR'));
+		}
+		
+		$this->set('campaignSlug', $campaignData['Campaign']['slug']);
+
+		$this->render('/Campaigns/fb_landing_page');
+	}
+
 	public function user_process($campaignSlug = null) {
 		if(isset($this->params->query['signed_request']) && !empty($this->params->query['signed_request'])) {
 			App::uses('FB', 'Facebook.Lib');
@@ -84,7 +98,7 @@ class CampaignsController extends AppController {
 	}
 
 	public function register($campaignSlug = null) {
-		$this->layout = 'register';
+		$this->layout = 'register_new';
 		
 		if(isset($this->params->query['signed_request']) && !empty($this->params->query['signed_request']) && $this->_check_campaign_closed($campaignSlug) == false) {
 			App::uses('FB', 'Facebook.Lib');
@@ -128,6 +142,8 @@ class CampaignsController extends AppController {
 						$this->request->data['CampaignUser']['first_name'] = $fbUser['first_name'];
 						$this->request->data['CampaignUser']['last_name'] = $fbUser['last_name'];
 						$this->request->data['CampaignUser']['fb_email'] = $fbUser['email'];
+						$this->request->data['CampaignUser']['phone'] = isset($fbUser['phone']) ? $fbUser['phone'] : '';
+						$this->request->data['CampaignUser']['age'] = isset($fbUser['birthday']) ? $fbUser['birthday'] : '';
 						if(isset($fbUser['hometown'])) {
 							$this->request->data['CampaignUser']['address'] = $fbUser['hometown']['name'];
 						} else {
@@ -164,8 +180,11 @@ class CampaignsController extends AppController {
 		$this->set('fbName', $userName == null ? $fbUser['name'] : $userName);
 		$this->set('fbEmail', $userEmail == null ? $fbUser['email'] : $userEmail);
 
+		$this->set('campaignShared', $this->_check_user_shared($user, $campaignSlug));
 		$this->set('registered', $this->_check_user_register($fbUser['id'], $campaignSlug) == true ? true : false);
 		$this->set('campaignSlug', $campaignSlug . '?' . $refferalId . 'signed_request=' . $this->params->query['signed_request']);
+
+		$this->render('/Campaigns/register_new');
 	}
 
 	public function faq() {

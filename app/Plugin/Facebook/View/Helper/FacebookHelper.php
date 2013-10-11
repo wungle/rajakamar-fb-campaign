@@ -582,8 +582,6 @@ class FacebookHelper extends AppHelper {
 		FB.api('/me/feed', 'POST', publish, function(response) {  
 			if (response && response.id) {
 		        location.href = '" . Router::url('/', true) . "/campaigns/user_shared_liked/" . $campaignRequest . "&user_shared=1';
-			} else {
-				alert('Sorry, Please post to your wall.');
 			}
 		});
 	};

@@ -8,7 +8,7 @@
 		<p><?php echo $this->Form->submit(isset($registered) && $registered == true ? 'Lanjutkan' : 'Daftar', array($disabled)); ?></p>
 	<?php echo $this->Form->end(); ?>
 
-	<p><?php echo $this->Facebook->like(array('href' => Configure::read('FB_URL_PAGE'), 'show_faces' => false, 'layout' => 'button_count')); ?></p>
+	<?php //echo $this->Facebook->like(array('href' => Configure::read('FB_URL_PAGE'), 'show_faces' => false, 'layout' => 'button_count')); ?>
 
-	<p><?php echo $this->Html->link($this->Html->image('/main/images/facebookShare.png'), '#', array('onclick' => 'share_me()', 'escape' => false)); ?></p>
+	<?php //echo $this->Html->link($this->Html->image('/main/images/facebookShare.png'), '#', array('onclick' => 'share_me()', 'escape' => false)); ?>
 </div>

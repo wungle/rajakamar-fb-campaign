@@ -76,6 +76,7 @@ class CampaignUsersController extends AppController {
  */
 	public function view($campaignSlug = null) {
 		$this->layout = 'view_score';
+
 		App::uses('FB', 'Facebook.Lib');
 
 		$user = FB::getUser();
@@ -118,6 +119,16 @@ class CampaignUsersController extends AppController {
 			)
 		);
 
+		// Ranking		
+		$this->CampaignUser->query("SET @i = 0");
+		$ranking = $this->CampaignUser->query("SELECT position, facebook_id 
+			FROM (
+			    SELECT id, facebook_id, @i:=@i+1 AS position
+				    FROM campaign_users ti order by ti.score desc, ti.refferal asc
+				)
+			CampaignUser WHERE facebook_id = " . $userData['CampaignUser']['facebook_id']
+		);
+
 		$refferal = $this->CampaignUser->find('count', array(
 			'conditions' => array(
 					'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
@@ -133,6 +144,7 @@ class CampaignUsersController extends AppController {
 
 		$this->set('fbId', $user);
 		$this->set('fbName', $fbUser['name']);
+		$this->set('ranking', isset($ranking[0]) ? $ranking[0]['CampaignUser']['position'] : '');
 		$this->set('score', $userData['CampaignUser']['score']);
 		$this->set('refferal', $refferal);
 		$this->set('refferalId', $campaignSlug . '?refferal=' . $userData['CampaignUser']['id']);

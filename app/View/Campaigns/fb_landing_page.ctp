@@ -1,5 +1,5 @@
 <div id="top-bg"></div>
-<div id="container">
+<div id="container-fb">
     <div id="logo"> 
     	<a href="http://www.rajakamar.com/">
     		<img src="/main/images/Logo-Rajakamar.png" width="250" height="76" alt="Logo" />
@@ -8,7 +8,7 @@
     <div style="padding-top:150px;"class="clearfix"></div>
     <div id="landing-page">
         <div class="landing-box">
-        	<img src="/main/images/Landing-Page.png" width="900" height="635" alt="landing page" />
+        	<img src="/main/images/Fb-Landing-Page.png" width="800" alt="landing page" />
         </div>
         <div class="faq">
           	<a href="/campaigns/faq">

@@ -41,8 +41,16 @@ img {
 	margin: 0 auto;
 }
 
+#container-fb {
+	background-color: #FFF;
+	border: 1px solid #ebebeb;
+	text-align: center;
+	width: 800px;
+	margin: 0 auto;
+}
+
 #landing-page {
-	margin-top:-150px;
+	margin-top: 150px;
 }
 
 #landing-page .landing-box {
@@ -50,12 +58,13 @@ img {
 }
 
 #landing-page .faq {
-	float:left;
-	position:absolute;
-	margin-top:-125px;
-	margin-left:110px;
+	float: left;
+	position: absolute;
+	clear: both;
+	margin-top: 15px;
+	margin-left: 120px;
 	top: 772px;
-	display:block;
+	display: block;
 }
 
 #landing-page .faq img {

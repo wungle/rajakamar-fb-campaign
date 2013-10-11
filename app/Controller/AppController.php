@@ -69,4 +69,8 @@ class AppController extends Controller {
 			$this->set('campaignLists', $campaignLists);
 		}
 	}
+	
+	public function appError($error) {
+    	$this->redirect('/');
+	}
 }

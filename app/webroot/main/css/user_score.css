@@ -479,7 +479,8 @@ input a:hover {
 /*************** END OF FOOTER ***************/
 
 #FAQ {
-	margin-top:150px;
+	margin-top:70px;
+	/*margin-top:150px;*/
 	color: #000000;
 	font-size: 12px;
 	text-align: left;

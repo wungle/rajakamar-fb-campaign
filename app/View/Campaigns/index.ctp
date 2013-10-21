@@ -11,7 +11,7 @@
         	<img src="/main/images/Landing-Page.png" width="900" height="635" alt="landing page" />
         </div>
         <div class="faq">
-          	<a href="/campaigns/faq">
+          	<a href="/pages/<?php echo $pageFaq['Page']['slug']; ?>">
           		<img src="/main/images/sk.png" width="250" height="83" alt="FAQ" />
           	</a>
       	</div>

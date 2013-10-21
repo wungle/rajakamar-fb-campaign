@@ -50,11 +50,11 @@ img {
 }
 
 #landing-page {
-	margin-top: 150px;
+	/*margin-top: 150px;*/
 }
 
 #landing-page .landing-box {
-	margin-top:190px;
+	/*margin-top:190px;*/
 }
 
 #landing-page .faq {
@@ -63,7 +63,8 @@ img {
 	clear: both;
 	margin-top: 15px;
 	margin-left: 120px;
-	top: 772px;
+	top: 582px;
+	/*top: 772px;*/
 	display: block;
 }
 

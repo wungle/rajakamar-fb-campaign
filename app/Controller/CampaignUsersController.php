@@ -46,7 +46,18 @@ class CampaignUsersController extends AppController {
 		}
 
 		$this->CampaignUser->unBindModel(array('belongsTo' => array('Campaign')));
+
+		// Ranking		
+		$this->CampaignUser->query("SET @i = 0");
+		$ranking = "(SELECT position
+			FROM (
+			    SELECT id, facebook_id, (select count(cUser.refferal) from campaign_users as cUser where cUser.refferal = ti.id) as refferalCount, @i:=@i+1 AS position
+				    FROM campaign_users ti order by ti.score desc, refferalCount desc, ti.created desc
+				)
+			campUser WHERE campUser.facebook_id = CampaignUser.facebook_id) as position";
+
 		$this->paginate = array(
+			'fields' => array($ranking, 'CampaignUser.*', '(select count(cUser.refferal) from campaign_users as cUser where cUser.refferal = CampaignUser.id) as refferal'),
 			'conditions' => array(
 				'CampaignUser.campaign_id' => $campaign['Campaign']['id'],
 				'OR' => array(
@@ -57,9 +68,7 @@ class CampaignUsersController extends AppController {
 				)
 			),
 			'limit' => 15,
-			'order' => array(
-				'CampaignUser.score' => 'desc'
-			)
+			'order' => 'CampaignUser.score desc, refferal desc, CampaignUser.created desc'
 		);
 
 		$this->set('campaignClosed', $this->_check_campaign_closed($campaignSlug));
@@ -124,13 +133,13 @@ class CampaignUsersController extends AppController {
 		$ranking = $this->CampaignUser->query("SELECT position, facebook_id 
 			FROM (
 			    SELECT id, facebook_id, @i:=@i+1 AS position
-				    FROM campaign_users ti order by ti.score desc, ti.refferal asc
+				    FROM campaign_users ti order by ti.score desc, ti.refferal desc, ti.created desc
 				)
 			CampaignUser WHERE facebook_id = " . $userData['CampaignUser']['facebook_id']
 		);
 
 		$refferal = $this->CampaignUser->find('count', array(
-			'conditions' => array(
+				'conditions' => array(
 					'CampaignUser.campaign_id' => $campaignId['Campaign']['id'],
 					'CampaignUser.refferal' => $userData['CampaignUser']['id']
 				)

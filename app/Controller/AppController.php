@@ -67,6 +67,20 @@ class AppController extends Controller {
 				)
 			);
 			$this->set('campaignLists', $campaignLists);
+		} else {
+			if($this->params->controller == 'campaigns' && $this->params->action == 'index') {
+				$this->loadModel('Page');
+
+				$pageFaq = $this->Page->find('first', array(
+						'conditions' => array(
+							'Page.id' => PAGE_TYPE_FAQ,
+							'Page.published' => true
+						)
+					)
+				);
+
+				$this->set('pageFaq', $pageFaq);
+			}
 		}
 	}
 	

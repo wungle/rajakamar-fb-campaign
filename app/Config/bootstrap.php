@@ -122,4 +122,6 @@ Configure::write('FB_URL_PAGE', 'https://www.facebook.com/pages/Rajakamar/214970
 Configure::write('SITE_RAJAKAMAR', 'http://www.rajakamar.com');
 Configure::write('FB_RAJAKAMAR', 214970965215483);
 
+define('PAGE_TYPE_FAQ',	1);
+
 define('PAGINATION_LIMIT',	20);

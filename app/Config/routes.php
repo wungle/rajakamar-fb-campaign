@@ -27,6 +27,7 @@
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
 	Router::connect('/', array('controller' => 'campaigns', 'action' => 'index'));
+	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'index', 'admin' => false));
 	Router::connect('/fb_landing_page', array('controller' => 'campaigns', 'action' => 'fb_landing_page'));
 	// Campaigns
 	Router::connect('/campaigns/user_process/*', array('controller' => 'campaigns', 'action' => 'user_process', 'admin' => false));

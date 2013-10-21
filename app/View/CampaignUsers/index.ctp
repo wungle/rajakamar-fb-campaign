@@ -25,10 +25,11 @@
             </tr>
             <?php foreach ($campaignUsers as $key => $campaignUser) { ?>
                 <tr>
-                    <td><?php echo ++$key; ?>&nbsp;</td>
+                    <td><?php echo (isset($campaignUser[0]) ? $campaignUser[0]['position'] : ''); ?></td>
+                    <!-- <td><?php //echo ++$key; ?>&nbsp;</td> -->
                     <td><?php echo $campaignUser['CampaignUser']['name']; ?>&nbsp;</td>
                     <td><span class="point1_"><?php echo $campaignUser['CampaignUser']['score']; ?></span></td>
-                    <td><span class="point2_"><?php echo $campaignUser['CampaignUser']['refferal']; ?></span></td>
+                    <td><span class="point2_"><?php echo (isset($campaignUser[0]) && isset($campaignUser[0]['refferal']) ? $campaignUser[0]['refferal'] : 0); ?></span></td>
                 </tr>
             <?php } ?>
         </tbody>
@@ -36,8 +37,8 @@
 </div>  
         
 <div id="lihatskor">
-    <form style=""id="button"> 
-        <input type=button onClick="parent.location = '/campaignUsers/view/<?php echo $campaignSlug; ?>'" value='Lihat Skor Saya'>  
+    <form style="" id="button"> 
+        <input type="button" onClick="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>')" value="Lihat Skor Saya">  
     </form>  
 </div>                    
 

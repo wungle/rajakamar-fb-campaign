@@ -89,6 +89,7 @@ class CampaignsController extends AppController {
 					}
 					$this->redirect('/campaigns/register/' . $campaignSlug . '?' . $refferalId . 'signed_request=' . $this->params->query['signed_request']);
 				} else {
+					// $this->redirect('/campaigns/register/' . $campaignSlug . '?' . $refferalId . 'signed_request=' . $this->params->query['signed_request']);
 					$this->redirect('/campaignUsers/view/' . $campaignSlug);
 				}
 			}
@@ -181,7 +182,7 @@ class CampaignsController extends AppController {
 		$this->set('fbEmail', $userEmail == null ? $fbUser['email'] : $userEmail);
 
 		$this->set('campaignShared', $this->_check_user_shared($user, $campaignSlug));
-		$this->set('registered', $this->_check_user_register($fbUser['id'], $campaignSlug) == true ? true : false);
+		$this->set('registered', $this->_check_user_register($user, $campaignSlug) == true ? true : false);
 		$this->set('campaignSlug', $campaignSlug . '?' . $refferalId . 'signed_request=' . $this->params->query['signed_request']);
 
 		$this->render('/Campaigns/register_new');

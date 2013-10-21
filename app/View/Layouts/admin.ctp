@@ -105,6 +105,12 @@
 			                    <?php } ?>
 		                    </ul>
 	                    </li>
+						<li class="<?php echo ($this->params->controller === 'pages' ? 'active' : ''); ?>">
+							<a href="/admin/pages">
+								<i class="icon-briefcase"></i>
+								<span>Pages</span>
+							</a>
+						</li>
 					</ul>
 				</div> <!-- /container -->
 			</div> <!-- /subnavbar-inner -->

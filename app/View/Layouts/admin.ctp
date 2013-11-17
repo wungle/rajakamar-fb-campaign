@@ -91,7 +91,7 @@
 								<span>Campaigns</span>
 							</a>
 						</li>
-						<li class="dropdown <?php echo ($this->params->controller === 'campaignUsers' ? 'active' : ''); ?>">
+						<li class="dropdown <?php echo ($this->params->controller === 'campaignUsers' && $this->params->action !== 'admin_referrals' ? 'active' : ''); ?>">
 							<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 	                        	<i class="icon-group"></i>
 	                        	<span>Campaign Users</span> <b class="caret"></b>
@@ -99,8 +99,22 @@
 	                        <ul class="dropdown-menu">
 	                        	<?php foreach($campaignLists as $campaignList) { ?>
 		                        	<li>
-		                        		<?php $listActive = isset($this->params->pass[0]) && $this->params->pass[0] == $campaignList['Campaign']['id'] ? 'active' : ''; ?>
+		                        		<?php $listActive = isset($this->params->pass[0]) && $this->params->pass[0] == $campaignList['Campaign']['id'] && $this->params->action !== 'admin_referrals' ? 'active' : ''; ?>
 		                        		<?php echo $this->Html->link(__($campaignList['Campaign']['name']), '/admin/campaignUsers/index/' . $campaignList['Campaign']['id'], array('class' => $listActive)); ?>
+			                        </li>
+			                    <?php } ?>
+		                    </ul>
+	                    </li>
+						<li class="dropdown <?php echo ($this->params->controller === 'campaignUsers' && $this->params->action === 'admin_referrals' ? 'active' : ''); ?>">
+							<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+	                        	<i class="icon-group"></i>
+	                        	<span>User Rferrals</span> <b class="caret"></b>
+	                        </a>
+	                        <ul class="dropdown-menu">
+	                        	<?php foreach($campaignLists as $campaignList) { ?>
+		                        	<li>
+		                        		<?php $listActive = isset($this->params->pass[0]) && $this->params->pass[0] == $campaignList['Campaign']['id'] && $this->params->action === 'admin_referrals' ? 'active' : ''; ?>
+		                        		<?php echo $this->Html->link(__($campaignList['Campaign']['name']), '/admin/campaignUsers/referrals/' . $campaignList['Campaign']['id'], array('class' => $listActive)); ?>
 			                        </li>
 			                    <?php } ?>
 		                    </ul>

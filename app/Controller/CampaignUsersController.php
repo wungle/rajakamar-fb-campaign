@@ -71,9 +71,41 @@ class CampaignUsersController extends AppController {
 			'order' => 'CampaignUser.score desc, refferal desc, CampaignUser.created desc'
 		);
 
+		$shareTime = null;
+		$refferalId = null;
+		$campaignShared = true;
+		$loginFirst = true;
+
+		$user = FB::getUser();
+		$userFb = FB::api('/' . $user);
+		if(!empty($userFb)) {
+			$this->CampaignUser->unBindModel(array('belongsTo' => array('Campaign')));
+			$userData = $this->CampaignUser->find('first', array(
+					'conditions' => array(
+						'CampaignUser.campaign_id' => $campaign['Campaign']['id'],
+						'CampaignUser.facebook_id' => $user
+					)
+				)
+			);
+
+			if($this->_check_last_shared($user, $campaignSlug) == false) {
+				$diff = strtotime('now') - strtotime($userData['CampaignUser']['last_shared']);
+				$shareTime = date('H:i:s', strtotime('06:00:00') - $diff);
+			}
+
+			$refferalId = $campaignSlug . '?refferal=' . $userData['CampaignUser']['id'];
+			$campaignShared = $this->_check_last_shared($user, $campaignSlug);
+			$loginFirst = false;
+		}
+
+		$this->set('shareTime', $shareTime);
+		$this->set('refferalId', $refferalId);
+		$this->set('loginFirst', $loginFirst);
 		$this->set('campaignClosed', $this->_check_campaign_closed($campaignSlug));
+		$this->set('campaignShared', $campaignShared);
 		$this->set('campaignSlug', $campaignSlug);
 		$this->set('campaignUsers', $this->paginate());
+		$this->set('campaignTitle', $campaign['Campaign']['title']);
 	}
 
 /**
@@ -338,4 +370,29 @@ class CampaignUsersController extends AppController {
 		$this->Session->setFlash(__('Campaign user was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+
+	public function admin_referrals($id = null) {
+		// Ranking
+		$this->CampaignUser->query("SET @i = 0");
+		$ranking = "(SELECT position
+			FROM (
+			    SELECT id, facebook_id, (select count(cUser.refferal) from campaign_users as cUser where cUser.refferal = ti.id) as refferalCount, @i:=@i+1 AS position
+				    FROM campaign_users ti order by ti.score desc, refferalCount desc, ti.created desc
+				)
+			campUser WHERE campUser.facebook_id = CampaignUser.facebook_id) as position";
+
+		$this->CampaignUser->recursive = -1;
+		$refferal = $this->CampaignUser->find('all', array(
+				'fields' => array($ranking, '(select count(countRef.refferal) FROM campaign_users as countRef where countRef.refferal = CampaignUser.id AND countRef.created > DATE_SUB(NOW(), INTERVAL 2 WEEK)) as count', 'CampaignUser.*'),
+				'conditions' => array(
+					'CampaignUser.campaign_id' => $id,
+				),
+				'order' => '(select count(countRef.refferal) FROM campaign_users as countRef where countRef.refferal = CampaignUser.id AND countRef.created > DATE_SUB(NOW(), INTERVAL 2 WEEK)) desc',
+				'limit' => 20
+			)
+		);
+
+		$this->set('campaignUsers', $refferal);
+	}
+
 }

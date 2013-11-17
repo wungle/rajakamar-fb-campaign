@@ -23,7 +23,7 @@
   	</div>
     <div style="margin-top:20px;" id="lihatskor">
 		<form style=""id="button"> 
-    		<input type=button onClick="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>')" value='Lihat Skor Saya'>  
+    		<input type=button onClick="parent.location='/campaignUsers/<?php echo $campaignSlug; ?>'" value='Lihat Skor'>  
 		</form>  
     </div>                    
     <div style="clear: both; padding-top:30px;"id="footer">

@@ -46,13 +46,12 @@
 			<?php if($campaignClosed == false) { ?>
 				<?php if($campaignShared == false) { ?>
 					<input type="button" value="SHARE TIME <?php echo $shareTime; ?>">
-					<?php //echo $this->Html->image('/main/images/facebookShare.png'); ?>
-					<?php //echo $shareTime; ?>
 				<?php } else { ?>
-					<?php //echo $this->Html->link($this->Html->image('/main/images/facebookShare.png'), '#', array('onclick' => 'share_refferal(\'' . $refferalId . '\', \'' . $campaignTitle . '\')', 'escape' => false)); ?>
             		<input type=button onClick="<?php echo 'share_refferal(\'' . $refferalId . '\', \'' . $campaignTitle . '\')'; ?>" value="SHARE">  
 				<?php } ?>
 			<?php } ?>
+    		<input type=button onClick="parent.location='/campaignUsers/<?php echo $campaignSlug; ?>'" value="BACK">  
         </form>  
     </div>                    
+
 </div>

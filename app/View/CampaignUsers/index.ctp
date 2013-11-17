@@ -38,7 +38,20 @@
         
 <div id="lihatskor">
     <form style="" id="button"> 
-        <input type="button" onClick="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>')" value="Lihat Skor Saya">  
+        <input type="button" onClick="javascript:login('/campaigns/user_process/<?php echo $campaignSlug; ?>')" value="LIHAT SKOR SAYA">  
+    </form>  
+    <form style="" id="button"> 
+        <?php if($campaignClosed == false) { ?>
+            <?php if($campaignShared == false) { ?>
+                <input type="button" value="SHARE TIME <?php echo $shareTime; ?>">
+            <?php } else { ?>
+                <?php if($loginFirst == true) { ?>
+                    <input type=button onClick="javascript:login('/campaignUsers/<?php echo $campaignSlug; ?>')" value="SHARE">  
+                <?php } else { ?>
+                    <input type=button onClick="<?php echo 'share_refferal(\'' . $refferalId . '\', \'' . $campaignTitle . '\')'; ?>" value="SHARE">  
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
     </form>  
 </div>                    
 

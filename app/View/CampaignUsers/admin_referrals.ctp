@@ -1,3 +1,7 @@
+<script>
+	var datasets = <?php echo $dataSet; ?>
+</script>
+
 <div class="container">
   	<div class="row">
     	<div class="span12">
@@ -16,7 +20,7 @@
 				                <th class="span1 center">Email</th>
 				                <th class="span1 center">Ranking</th>
 				                <th class="span1 center">Score</th>
-				                <th class="span2 center">Refferal 2 Weeks</th>
+				                <th class="span2 center">This Month</th>
 				                <th class="td-actions span2 center"> </th>
 				            </tr>
 			            </thead>
@@ -32,7 +36,7 @@
 									<td class="center"><?php echo (isset($campaignUser[0]) && isset($campaignUser[0]['count']) ? $campaignUser[0]['count'] : ''); ?>&nbsp;</td>
 					                <td class="td-actions center">
 										<?php echo $this->Html->link(__('<i class="btn-icon-only icon-search"> </i>'), array('action' => 'view', $campaignUser['CampaignUser']['id']), array('class' => 'btn btn-small', 'escape' => false)); ?>
-										<?php echo $this->Form->postLink(__('<i class="btn-icon-only icon-remove"> </i>'), array('action' => 'delete', $campaignUser['CampaignUser']['id']), array('class' => 'btn btn-danger btn-small', 'escape' => false), __('Are you sure you want to delete # %s?', $campaignUser['CampaignUser']['id'])); ?>
+										<?php //echo $this->Form->postLink(__('<i class="btn-icon-only icon-remove"> </i>'), array('action' => 'delete', $campaignUser['CampaignUser']['id']), array('class' => 'btn btn-danger btn-small', 'escape' => false), __('Are you sure you want to delete # %s?', $campaignUser['CampaignUser']['id'])); ?>
 					                </td>
 					            </tr>
 					        <?php } ?>
@@ -46,5 +50,17 @@
 	    <!-- /span12 -->
 	</div>
 	<!-- /row --> 
+
+  	<div class="row">
+    	<div class="span12">
+			<div class="demo-container span12">
+				<div id="placeholder" class="demo-placeholder"></div>
+				<p id="choices"></p>
+			</div>
+	    </div>
+	    <!-- /span12 -->
+	</div>
+	<!-- /row --> 
+
 </div>
 <!-- /container -->

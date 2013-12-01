@@ -12,19 +12,13 @@
 		    echo $this->Html->css('/css/bootstrap-responsive.min');
 		    echo $this->Html->css('/css/font-awesome.min');
 		    echo $this->Html->css('/css/jquery-ui-1.8.21.custom');
+			if($this->params->controller === 'campaignUsers' && $this->params->action === 'admin_referrals') {
+			    echo $this->Html->css('/css/chart');
+			}
 		    echo $this->Html->css('/css/style');
-
-			echo $this->Html->script('/js/jquery-1.7.2.min');
-			echo $this->Html->script('/js/bootstrap');
-			echo $this->Html->script('/js/base');
-			echo $this->Html->script('/js/jquery-ui-1.8.21.custom.min');
-			echo $this->Html->script('/js/jquery-ui-timepicker-addon');
-			echo $this->Html->script('/js/tinymce/tinymce.min');
-			echo $this->Html->script('/js/main');
 
 			echo $this->fetch('meta');
 			echo $this->fetch('css');
-			echo $this->fetch('script');
 		?>
 
 	    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -151,6 +145,22 @@
 				</div> <!-- /container -->
 			</div> <!-- /footer-inner -->
 		</div> <!-- /footer -->
+
+	    <?php
+			echo $this->Html->script('/js/jquery-1.7.2.min');
+			echo $this->Html->script('/js/bootstrap');
+			echo $this->Html->script('/js/base');
+			echo $this->Html->script('/js/jquery-ui-1.8.21.custom.min');
+			echo $this->Html->script('/js/jquery-ui-timepicker-addon');
+			echo $this->Html->script('/js/tinymce/tinymce.min');
+			if($this->params->controller === 'campaignUsers' && $this->params->action === 'admin_referrals') {
+				echo $this->Html->script('/js/jquery.flot');
+				echo $this->Html->script('/js/chart');
+			}
+			echo $this->Html->script('/js/main');
+
+			echo $this->fetch('script');
+		?>
 
   	</body>
 </html>

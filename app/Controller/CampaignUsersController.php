@@ -327,7 +327,7 @@ class CampaignUsersController extends AppController {
 		$this->CampaignUser->recursive = 0;
 		$this->paginate = array(
 			'conditions' => array(
-				'campaign_id' => $id
+				'CampaignUser.campaign_id' => $id
 			),
 			'limit' => PAGINATION_LIMIT
 		);
@@ -358,16 +358,17 @@ class CampaignUsersController extends AppController {
  * @return void
  */
 	public function admin_delete($id = null) {
-		$this->CampaignUser->id = $id;
-		if (!$this->CampaignUser->exists()) {
-			throw new NotFoundException(__('Invalid campaign user'));
-		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->CampaignUser->delete()) {
-			$this->Session->setFlash(__('Campaign user deleted'));
-			$this->redirect(array('action' => 'index'));
-		}
-		$this->Session->setFlash(__('Campaign user was not deleted'));
+		// $this->CampaignUser->id = $id;
+		// if (!$this->CampaignUser->exists()) {
+		// 	throw new NotFoundException(__('Invalid campaign user'));
+		// }
+		// $this->request->onlyAllow('post', 'delete');
+		// if ($this->CampaignUser->delete()) {
+		// 	$this->Session->setFlash(__('Campaign user deleted'));
+		// 	$this->redirect(array('action' => 'index'));
+		// }
+		// $this->Session->setFlash(__('Campaign user was not deleted'));
+		$this->Session->setFlash(__('Campaign user delete is disabled'));
 		$this->redirect(array('action' => 'index'));
 	}
 
@@ -381,18 +382,47 @@ class CampaignUsersController extends AppController {
 				)
 			campUser WHERE campUser.facebook_id = CampaignUser.facebook_id) as position";
 
-		$this->CampaignUser->recursive = -1;
+		$this->CampaignUser->recursive = 1;
 		$refferal = $this->CampaignUser->find('all', array(
-				'fields' => array($ranking, '(select count(countRef.refferal) FROM campaign_users as countRef where countRef.refferal = CampaignUser.id AND countRef.created > DATE_SUB(NOW(), INTERVAL 2 WEEK)) as count', 'CampaignUser.*'),
+				'fields' => array($ranking, '(select count(countRef.refferal) FROM campaign_users as countRef where countRef.refferal = CampaignUser.id AND DATE_FORMAT(countRef.created, "%y-%m") = DATE_FORMAT("2013-11-25", "%y-%m")) as count', 'CampaignUser.*'),
 				'conditions' => array(
-					'CampaignUser.campaign_id' => $id,
+					'CampaignUser.campaign_id' => $id
 				),
-				'order' => '(select count(countRef.refferal) FROM campaign_users as countRef where countRef.refferal = CampaignUser.id AND countRef.created > DATE_SUB(NOW(), INTERVAL 2 WEEK)) desc',
-				'limit' => 20
+				'order' => '(select count(countRef.refferal) FROM campaign_users as countRef where countRef.refferal = CampaignUser.id AND DATE_FORMAT(countRef.created, "%y-%m") = DATE_FORMAT("2013-11-25", "%y-%m")) desc',
+				'limit' => 10
 			)
 		);
 
+		$day = null;
+		$days = null;
+		$dayCount = 0;
+		$colorChart = array('rgb(237,194,64)', 'rgb(203,75,75)', 'rgb(77,167,77)', 'rgb(118,51,189)', 'rgb(255, 20, 147)', 'rgb(47, 79, 79)', 'rgb(255, 215, 0)', 'rgb(124, 252, 0)', 'rgb(32, 178, 170)', 'rgb(255, 69, 0)');
+		$dataSet = '{';
+		foreach($refferal as $key => $campaignUser) {
+			$dataSet .= '"' . $campaignUser['CampaignUser']['name'] . '": {color: "' . $colorChart[$key] . '", label: "' . $campaignUser['CampaignUser']['name'] . '", data: [';
+			foreach($campaignUser['ChildCampaignUser'] as $key => $childCampaignUser) {
+				$days = $childCampaignUser['ChildCampaignUser'][0]['day'];
+				// if($day == $day) {
+					++$dayCount;
+				// }
+				if(isset($campaignUser['ChildCampaignUser'][$key + 1]['ChildCampaignUser']) && $campaignUser['ChildCampaignUser'][$key + 1]['ChildCampaignUser'][0]['day'] != $days) {
+					$dataSet .= '[' . $days . ', ' . $dayCount . '], ';
+					$dayCount = 0;
+				}
+				 else if(!isset($campaignUser['ChildCampaignUser'][$key + 1]['ChildCampaignUser'])) {
+					$dataSet .= '[' . $days . ', ' . $dayCount . '], ';
+					$dayCount = 0;
+				}
+
+				// $day = $childCampaignUser['ChildCampaignUser'][0]['day'];
+			}
+			$dataSet .= ']}, ';
+		}
+		$dataSet .= '}';
+		// debug($refferal);
+
 		$this->set('campaignUsers', $refferal);
+		$this->set('dataSet', $dataSet);
 	}
 
 }

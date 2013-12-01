@@ -16,7 +16,7 @@
 				                <th class="span1 center"><?php echo $this->Paginator->sort('phone'); ?></th>
 				                <th class="span1 center"><?php echo $this->Paginator->sort('score'); ?></th>
 				                <th class="span1 center"><?php echo $this->Paginator->sort('refferal'); ?></th>
-				                <th class="td-actions span2 center"> </th>
+				                <th class="td-actions span1 center"> </th>
 				            </tr>
 			            </thead>
 			            <tbody>
@@ -30,7 +30,7 @@
 									<td class="center"><?php echo $campaignUser['CampaignUser']['refferal']; ?>&nbsp;</td>
 					                <td class="td-actions center">
 										<?php echo $this->Html->link(__('<i class="btn-icon-only icon-search"> </i>'), array('action' => 'view', $campaignUser['CampaignUser']['id']), array('class' => 'btn btn-small', 'escape' => false)); ?>
-										<?php echo $this->Form->postLink(__('<i class="btn-icon-only icon-remove"> </i>'), array('action' => 'delete', $campaignUser['CampaignUser']['id']), array('class' => 'btn btn-danger btn-small', 'escape' => false), __('Are you sure you want to delete # %s?', $campaignUser['CampaignUser']['id'])); ?>
+										<?php //echo $this->Form->postLink(__('<i class="btn-icon-only icon-remove"> </i>'), array('action' => 'delete', $campaignUser['CampaignUser']['id']), array('class' => 'btn btn-danger btn-small', 'escape' => false), __('Are you sure you want to delete # %s?', $campaignUser['CampaignUser']['id'])); ?>
 					                </td>
 					            </tr>
 					        <?php } ?>

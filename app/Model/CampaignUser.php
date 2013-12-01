@@ -37,6 +37,35 @@ class CampaignUser extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'ParentCampaignUser' => array(
+			'className' => 'CampaignUser',
+			'foreignKey' => 'refferal',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'ChildCampaignUser' => array(
+			'className' => 'CampaignUser',
+			'foreignKey' => 'refferal',
+			'dependent' => false,
+			'conditions' => array('DATE_FORMAT(ChildCampaignUser.created, "%y-%m") = DATE_FORMAT("2013-11-25", "%y-%m")'),
+			'fields' => array('DAY(ChildCampaignUser.created) AS day'),
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 }
